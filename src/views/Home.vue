@@ -20,6 +20,9 @@
                   class="pt-6 mx-auto" flat
                   :key="$store.getters.currentStation.id">
             <v-card-text>
+              <v-avatar color="red">
+                <span class="white--text text-h5">{{ lettersForAvatar }}</span>
+              </v-avatar>
               <h3 class="text-h5 mb-2">
                 {{ $store.getters.currentStation.name }}
               </h3>
@@ -50,13 +53,13 @@
                 Website:
               </v-col>
               <v-col>
-                <a :href="`//${$store.getters.currentStation.website}`" target="_blank">{{ $store.getters.currentStation.website }}</a>
+                <a :href="`${$store.getters.currentStation.website}`" target="_blank">{{ $store.getters.currentStation.website }}</a>
               </v-col>
               <v-col class="text-right" tag="strong" cols="6">
                 Stream:
               </v-col>
               <v-col>
-                <a :href="`//${$store.getters.currentStation.src}`" target="_blank">{{ $store.getters.currentStation.src }}</a>
+                <a :href="`${$store.getters.currentStation.src}`" target="_blank">{{ $store.getters.currentStation.src }}</a>
               </v-col>
             </v-row>
           </v-card>
@@ -129,6 +132,22 @@
 
 export default {
   name: 'Home',
+  computed: {
+    lettersForAvatar() {
+      let wordsCount = this.countWords(this.$store.getters.currentStation.name)
+      let name = this.$store.getters.currentStation.name
+      name = name.replace(/(^\s*)|(\s*$)/gi,"");//exclude start and end white-space
+      name = name.replace(/[ ]{2,}/gi," ");//2 or more space to 1
+      name = name.replace(/\n /,"\n"); // exclude newline with a start spacing
+      name = name.replace(/[-|] /,""); // exclude "-" and "|"
+      let newName = name.split(' ').filter(function(str){return str!=="";})
+      if (wordsCount >= 2) {
+        return `${newName[0][0]}${newName[1][0]}`
+      } else {
+        return `${newName[0]}`
+      }
+    }
+  },
   data: () => ({
     addStationDialog: false,
     active: [],
@@ -159,6 +178,14 @@ export default {
         }
       })
     },
+    countWords(s) {
+      s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
+      s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
+      s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
+      s = s.replace(/[-|] /,""); // exclude "-" and "|"
+      return s.split(' ').filter(function(str){return str!=="";}).length
+      //return s.split(' ').filter(String).length; - this can also be used
+    }
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row>
     <v-col cols="1" align-self="center">
       <v-btn icon @click="togglePlay">
         <v-icon v-if="player.isPlaying">mdi-pause</v-icon>
@@ -10,13 +10,9 @@
       </audio>
     </v-col>
     <v-col align-self="center">
-      <div class="ticker-wrap">
-        <div class="ticker">
-          <div class="ticker__item">
+      <marquee scrolldelay="45" truespeed style="font-size: 20px">
             {{ currentlyPlaying }}
-          </div>
-        </div>
-      </div>
+      </marquee>
     </v-col>
     <v-col cols="2" align-self="center">
       <v-slider
@@ -47,7 +43,7 @@ export default {
   computed: {
     currentlyPlaying() {
       if (this.player.isPlaying) {
-        return `${this.$store.getters.currentStation.name} - ${this.$store.getters.currentStation.current_song}`
+        return `${this.$store.getters.currentStation.current_song}`
       }
       return 'Paused'
     }
@@ -111,64 +107,5 @@ export default {
 </script>
 
 <style lang="scss">
-* { box-sizing: border-box; }
-$duration: 10s;
 
-@-webkit-keyframes ticker {
-  0% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    visibility: visible;
-  }
-
-  100% {
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0);
-  }
-}
-
-@keyframes ticker {
-  0% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    visibility: visible;
-  }
-
-  100% {
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0);
-  }
-}
-.ticker-wrap {
-  bottom: 0;
-  width: 100%;
-  overflow: hidden;
-  height: 4rem;
-  padding-left: 100%;
-  box-sizing: content-box;
-
-  .ticker {
-    display: inline-block;
-    height: 4rem;
-    line-height: 4rem;
-    white-space: nowrap;
-    padding-right: 100%;
-    box-sizing: content-box;
-
-    -webkit-animation-iteration-count: infinite;
-    animation-iteration-count: infinite;
-    -webkit-animation-timing-function: linear;
-    animation-timing-function: linear;
-    -webkit-animation-name: ticker;
-    animation-name: ticker;
-    -webkit-animation-duration: $duration;
-    animation-duration: $duration;
-
-    &__item {
-      display: inline-block;
-      font-size: 20px;
-      color: white;
-    }
-  }
-}
 </style>

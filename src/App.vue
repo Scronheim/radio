@@ -3,7 +3,7 @@
     <v-main>
       <router-view/>
     </v-main>
-    <v-footer absolute>
+    <v-footer fixed>
       <player/>
     </v-footer>
   </v-app>
