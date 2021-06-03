@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="1" align-self="center">
       <v-btn icon @click="togglePlay">
-        <v-icon v-if="player.isPlaying">mdi-pause</v-icon>
+        <v-icon v-if="$store.getters.isPlaying">mdi-pause</v-icon>
         <v-icon v-else>mdi-play</v-icon>
       </v-btn>
       <audio id="player" controls style="display: none">
@@ -14,8 +14,8 @@
             {{ currentlyPlaying }}
       </marquee>
     </v-col>
-    <v-col cols="2" align-self="center">
-      <v-slider
+    <v-col cols="2">
+      <v-slider height="40"
           v-model="volume"
           thumb-color="success"
           thumb-label
@@ -35,14 +35,14 @@ export default {
   },
   watch: {
     '$store.getters.currentStation'(newStation, oldStation) {
-      if (newStation !== oldStation) {
+      if (newStation.src !== oldStation.src) {
         this.playStation()
       }
     }
   },
   computed: {
     currentlyPlaying() {
-      if (this.player.isPlaying) {
+      if (this.$store.getters.isPlaying) {
         return `${this.$store.getters.currentStation.current_song}`
       }
       return 'Paused'
@@ -51,18 +51,17 @@ export default {
   data: () => ({
     player: {
       element: HTMLElement,
-      isPlaying: false,
     },
     volume: 0,
     timer: null,
   }),
   methods: {
     playStation() {
-      if (this.player.isPlaying) {
+      if (this.$store.getters.isPlaying) {
         this.player.element.pause()
-        this.player.isPlaying = false
+        this.$store.commit('setPlaying', false)
       }
-      this.player.isPlaying = false
+      this.$store.commit('setPlaying', false)
       this.$store.dispatch('getCurrentSong', this.$store.getters.currentStation)
       if (this.timer) {
         clearInterval(this.timer)
@@ -72,22 +71,22 @@ export default {
       }, 5000)
       this.player.element.load()
       this.player.element.play().then(() => {
-        this.player.isPlaying = true
+        this.$store.commit('setPlaying', true)
       })
     },
     togglePlay() {
       if (this.timer) {
         clearInterval(this.timer)
       }
-      if (this.player.isPlaying) {
+      if (this.$store.getters.isPlaying) {
         this.player.element.pause()
-        this.player.isPlaying = false
+        this.$store.commit('setPlaying', false)
       } else {
         this.timer = setInterval(() => {
           this.$store.dispatch('getCurrentSong', this.$store.getters.currentStation)
         }, 5000)
         this.player.element.play()
-        this.player.isPlaying = true
+        this.$store.commit('setPlaying', true)
       }
     },
     changeVolume(value) {

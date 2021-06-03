@@ -33,14 +33,19 @@ router.route('/api/stations')
   })
 
 
-router.get('/api/genres', (req, res) => {
-  db.selectGenres().then((response) => {
-    response.forEach((genre) => {
-      genre.children = []
+router.route('/api/genres')
+  .get((req, res) => {
+    db.selectGenres().then((response) => {
+      jsonResponse(res, response)
+    });
+  })
+  .post((req, res) => {
+    db.insertGenre(req.body).then((response) => {
+      jsonResponse(res, response)
+    }).catch((error) => {
+      jsonResponse(res, null, error.sqlMessage, false)
     })
-    jsonResponse(res, response)
-  });
-});
+})
 
 router.post('/api/current_song', async (req, res) => {
   const serverType = req.body.server_type
@@ -57,7 +62,7 @@ router.post('/api/current_song', async (req, res) => {
         // const xml = response.data
         // const parser = new DOMParser()
         // const parsed = parser.parseFromString(xml, 'application/xml')
-        result = dom.getElementsByClassName('streamdata')[7].innerHTML
+        result = dom.getElementsByClassName('streamdata')[req.body.icecast_song_field_number].innerHTML
       })
       break
   }
@@ -72,12 +77,12 @@ async function checkCurrentSong(host) {
 }
 
 
-function jsonResponse(res, data, errors=[], success=true, code=200) {
+function jsonResponse(res, data, error, success=true) {
+  if (error) res.status(400)
   return res.json({
     data: data,
     success: success,
-    errors: errors,
-    code: code
+    error: error,
   })
 }
 

@@ -12,9 +12,13 @@ export default new Vuex.Store({
       current_song: ''
     },
     categories: [],
-    serverTypes: ['shoutcast', 'icecast']
+    serverTypes: ['icecast', 'shoutcast'],
+    isPlaying: false,
   },
   mutations: {
+    setPlaying(state, payload) {
+      state.isPlaying = payload
+    },
     fillStations(state, payload) {
       state.stations = payload
     },
@@ -22,23 +26,17 @@ export default new Vuex.Store({
       state.genres = payload
     },
     fillCategories(state) {
+      state.categories = []
       state.genres.forEach((genre) => {
-        let result = state.stations.filter((station) => {
-          return station.genre === genre.name
+        const stations = state.stations.filter((st) => {
+          return st.genre === genre.name
         })
-        if (result.length > 0) {
-          const cat = state.categories.some((c) => {
-            return c.name === genre.name
+        if (stations.length > 0) {
+          state.categories.push({
+            id: genre.id,
+            name: genre.name,
+            children: stations
           })
-          if (cat) {
-            genre.children = result
-          } else {
-            state.categories.push({
-              id: genre.id,
-              name: genre.name,
-              children: result
-            })
-          }
         }
       })
     },
@@ -50,21 +48,29 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    getStations(context) {
-      return axios.get('/api/stations').then((response) => {
-        context.commit('fillStations', response.data.data)
+    refresh(context) {
+      Promise.all([context.dispatch('getStations'), context.dispatch('getGenres')]).then((response) => {
+        context.commit('fillStations', response[0].data.data)
+        context.commit('fillGenres', response[1].data.data)
+        context.commit('fillCategories')
       })
     },
+    getStations() {
+      return axios.get('/api/stations')
+    },
     async addNewStation(context, payload) {
+      delete payload.current_song
       return await axios.post('/api/stations', payload)
     },
     async updateStation(context, payload) {
+      delete payload.current_song
       return await axios.patch('/api/stations', payload)
     },
-    getGenres(context) {
-      return axios.get('/api/genres').then((response) => {
-        context.commit('fillGenres', response.data.data)
-      })
+    getGenres() {
+      return axios.get('/api/genres')
+    },
+    async addNewGenre(context, payload) {
+      return await axios.post('/api/genres', payload)
     },
     getCurrentSong(context, station) {
       axios.post('/api/current_song', station).then((response) => {
@@ -77,7 +83,8 @@ export default new Vuex.Store({
     genres: state => state.genres,
     categories: state => state.categories,
     currentStation: state => state.currentStation,
-    serverTypes: state => state.serverTypes
+    serverTypes: state => state.serverTypes,
+    isPlaying: state => state.isPlaying
   },
   modules: {
   }

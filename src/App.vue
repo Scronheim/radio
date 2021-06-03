@@ -16,9 +16,7 @@ export default {
   components: {Player},
   mounted() {
     this.$vuetify.theme.dark = true
-    Promise.all([this.$store.dispatch('getStations'), this.$store.dispatch('getGenres')]).then(() => {
-      this.$store.commit('fillCategories')
-    })
+    this.$store.dispatch('refresh')
   },
 };
 </script>
