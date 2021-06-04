@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, autoUpdater } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -9,6 +9,9 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
+
+autoUpdater.setFeedURL('http://176.57.214.6/radio')
+autoUpdater.checkForUpdates()
 
 async function createWindow() {
   // Create the browser window.
@@ -62,6 +65,12 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
+  let updateApp = require('update-electron-app');
+
+  updateApp({
+    updateInterval: '1 hour',
+    notifyUser: true
+  });
   createWindow()
 })
 

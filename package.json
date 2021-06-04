@@ -1,7 +1,8 @@
 {
   "name": "radio",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -12,18 +13,25 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
+  "repository": "https://github.com/Scronheim/radio",
+  "updater": {
+    "url": "https://raw.githubusercontent.com/scronheim/radio/releases/{platform}-{arch}-{channel}.json"
+  },
   "main": "background.js",
   "dependencies": {
+    "@electron-forge/publisher-github": "^6.0.0-beta.57",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
+    "electron-updater": "^4.3.9",
+    "electron-vue": "^0.0.1",
     "express": "^4.17.1",
     "knex": "^0.95.6",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "mysql2": "^2.2.5",
-    "sqlite3": "^5.0.2",
+    "update-electron-app": "^2.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue-toastification": "^1.7.11",
@@ -40,6 +48,7 @@
     "dom-parser": "^0.1.6",
     "electron": "^12.0.0",
     "electron-devtools-installer": "^3.1.0",
+    "electron-simple-publisher": "^2.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "fast-xml-parser": "^3.19.0",
