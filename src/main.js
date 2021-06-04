@@ -32,5 +32,9 @@ new Vue({
   vuetify,
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  created() {
+    // Prevent blank screen in Electron builds
+    this.$router.push('/')
+  }
 }).$mount('#app')
