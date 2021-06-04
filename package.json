@@ -15,7 +15,7 @@
   },
   "repository": "https://github.com/Scronheim/radio",
   "updater": {
-    "url": "https://raw.githubusercontent.com/scronheim/radio/releases/{platform}-{arch}-{channel}.json"
+    "url": "https://raw.githubusercontent.com/scronheim/radio/releases"
   },
   "main": "background.js",
   "dependencies": {
