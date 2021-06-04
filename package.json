@@ -1,12 +1,13 @@
 {
-  "name": "vue-electron-app",
+  "name": "radio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
+    "electron:build windows": "vue-cli-service electron:build --windows",
+    "electron:build linux": "vue-cli-service electron:build --linux",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
@@ -16,10 +17,12 @@
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.5",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "knex": "^0.95.6",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "mysql2": "^2.2.5",
     "sqlite3": "^5.0.2",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

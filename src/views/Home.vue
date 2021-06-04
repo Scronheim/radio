@@ -60,7 +60,7 @@
                 <svg id="equalizer">
                   <defs>
                     <linearGradient id="barBg" gradientTransform="rotate(90)">
-                      <stop offset="0%" stop-color="#11FF0A"/>
+                      <stop offset="0%" stop-color="#a142f5"/>
                       <stop offset="50%" stop-color="#12fdfd"/>
                       <stop offset="100%" stop-color="#fff"/>
                     </linearGradient>

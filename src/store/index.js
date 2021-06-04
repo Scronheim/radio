@@ -14,6 +14,7 @@ export default new Vuex.Store({
     categories: [],
     serverTypes: ['icecast', 'shoutcast'],
     isPlaying: false,
+    apiHost: 'http://176.57.214.6:3001'
   },
   mutations: {
     setPlaying(state, payload) {
@@ -55,25 +56,25 @@ export default new Vuex.Store({
         context.commit('fillCategories')
       })
     },
-    getStations() {
-      return axios.get('/api/stations')
+    getStations(context) {
+      return axios.get(`${context.state.apiHost}/api/stations`)
     },
     async addNewStation(context, payload) {
       delete payload.current_song
-      return await axios.post('/api/stations', payload)
+      return await axios.post(`${context.state.apiHost}/api/stations`, payload)
     },
     async updateStation(context, payload) {
       delete payload.current_song
-      return await axios.patch('/api/stations', payload)
+      return await axios.patch(`${context.state.apiHost}/api/stations`, payload)
     },
-    getGenres() {
-      return axios.get('/api/genres')
+    getGenres(context) {
+      return axios.get(`${context.state.apiHost}/api/genres`)
     },
     async addNewGenre(context, payload) {
-      return await axios.post('/api/genres', payload)
+      return await axios.post(`${context.state.apiHost}/api/genres`, payload)
     },
     getCurrentSong(context, station) {
-      axios.post('/api/current_song', station).then((response) => {
+      axios.post(`${context.state.apiHost}/api/current_song`, station).then((response) => {
         context.commit('setCurrentSong', response.data.data)
       })
     }

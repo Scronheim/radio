@@ -16,8 +16,8 @@ class DB {
       client: 'mysql2',
       connection: {
         // 192.168.112.2 - внутренний адрес в докере
-        host: '192.168.112.2',
-        user: 'user',
+        host: '127.0.0.1',
+        user: 'scronheim',
         password: '2360087',
         database: 'radio',
         dateStrings: 'date'

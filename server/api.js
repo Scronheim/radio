@@ -1,5 +1,6 @@
 "use strict";
 const express = require('express')
+const cors = require('cors')
 const mysqldb = require('./db')
 const bodyParser = require('body-parser')
 const moment = require('moment')
@@ -10,6 +11,7 @@ const parser = new DomParser();
 
 const db = new mysqldb();
 const app = express();
+app.use(cors())
 const router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -86,7 +88,7 @@ function jsonResponse(res, data, error, success=true) {
   })
 }
 
-
-app.listen(3001, function() {
-  console.log('Express server listening on port 3001')
+const port = 3001
+app.listen(port, function() {
+  console.log(`Express server listening on port ${port}`)
 });
