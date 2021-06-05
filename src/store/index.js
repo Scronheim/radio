@@ -14,11 +14,15 @@ export default new Vuex.Store({
     categories: [],
     serverTypes: ['icecast', 'shoutcast'],
     isPlaying: false,
-    apiHost: 'http://176.57.214.6:3001'
+    apiHost: 'http://176.57.214.6:3001',
+    currentSong: '',
   },
   mutations: {
     setPlaying(state, payload) {
-      state.isPlaying = payload
+      state.isPlaying = payload.state
+      if (payload.station) {
+        state.currentStation = payload.station
+      }
     },
     fillStations(state, payload) {
       state.stations = payload
@@ -41,11 +45,8 @@ export default new Vuex.Store({
         }
       })
     },
-    fillCurrentStation(state, payload) {
-      state.currentStation = payload
-    },
     setCurrentSong(state, payload) {
-      Vue.set(state.currentStation, 'current_song', payload)
+      state.currentSong = payload
     }
   },
   actions: {
@@ -60,11 +61,9 @@ export default new Vuex.Store({
       return axios.get(`${context.state.apiHost}/api/stations`)
     },
     async addNewStation(context, payload) {
-      delete payload.current_song
       return await axios.post(`${context.state.apiHost}/api/stations`, payload)
     },
     async updateStation(context, payload) {
-      delete payload.current_song
       return await axios.patch(`${context.state.apiHost}/api/stations`, payload)
     },
     getGenres(context) {
@@ -84,6 +83,7 @@ export default new Vuex.Store({
     genres: state => state.genres,
     categories: state => state.categories,
     currentStation: state => state.currentStation,
+    currentSong: state => state.currentSong,
     serverTypes: state => state.serverTypes,
     isPlaying: state => state.isPlaying
   },

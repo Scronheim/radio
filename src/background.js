@@ -1,23 +1,22 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, autoUpdater } from 'electron'
+import { app, protocol, BrowserWindow, Menu } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const version = require('../package.json').version
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
-
-autoUpdater.setFeedURL('http://176.57.214.6/radio')
-autoUpdater.checkForUpdates()
-
+Menu.setApplicationMenu(null)
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     width: 1400,
-    height: 800,
+    height: 1000,
+    title: `Radio v${version}`,
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone

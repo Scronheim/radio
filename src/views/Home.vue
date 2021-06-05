@@ -2,12 +2,40 @@
   <v-container fluid>
     <v-row>
       <v-col cols="4">
-        <v-btn class="mb-2" width="100%" color="success" @click="addStationDialog = true">Add station</v-btn>
-        <v-btn class="mb-2" width="100%" color="success" @click="addGenreDialog = true">Add Genre</v-btn>
+        <v-row>
+          <v-col>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    color="success"
+                    dark
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </template>
+              <v-list dense>
+                <v-list-item dense link @click="addStationDialog = true">
+                  <v-list-item-title>{{ $t('newRadio.title') }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item dense link @click="addGenreDialog = true">
+                  <v-list-item-title>{{ $t('newGenre.title') }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
+          <v-col align="end">
+            <v-btn icon class="mb-2" color="white" @click="settingsDialog = true">
+              <v-icon>mdi-cog</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
         <v-sheet class="pa-2 mb-2 primary">
           <v-text-field
               v-model="search"
-              label="Station filter"
+              :label="$t('radio.stationFilter')"
               dark
               flat
               solo
@@ -40,118 +68,60 @@
       </v-col>
       <v-divider vertical/>
       <v-col class="d-flex text-center">
-        <v-scroll-y-transition mode="out-in">
-          <v-card v-if="$store.getters.currentStation.id"
-                  class="pt-5 mx-auto" flat
-                  :key="$store.getters.currentStation.id">
-            <v-btn absolute right fab small color="primary" @click="showEditStationDialog">
-              <v-icon>
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-            <v-card-text>
-              <v-avatar color="red">
-                <span class="white--text text-h5">{{ lettersForAvatar }}</span>
-              </v-avatar>
-              <h3 class="text-h5 mb-2">
-                {{ $store.getters.currentStation.name }}
-              </h3>
-              <div id="container">
-                <svg id="equalizer">
-                  <defs>
-                    <linearGradient id="barBg" gradientTransform="rotate(90)">
-                      <stop offset="0%" stop-color="#a142f5"/>
-                      <stop offset="50%" stop-color="#12fdfd"/>
-                      <stop offset="100%" stop-color="#fff"/>
-                    </linearGradient>
-                  </defs>
-                  <rect
-                      v-for="(value, i) in bars" :key="i"
-                      class="bar"
-                      :width="100 / bars.length + '%'"
-                      :height="value + '%'"
-                      :x="i * 100 / bars.length + '%'"
-                      :y="100 - value + '%'"
-                  />
-                </svg>
-              </div>
-            </v-card-text>
-            <v-divider/>
-            <v-row class="text-left" tag="v-card-text">
-              <v-col class="text-right" tag="strong" cols="6">
-                Title:
-              </v-col>
-              <v-col>{{ $store.getters.currentStation.name }}</v-col>
-              <v-col class="text-right" tag="strong" cols="6">
-                Current song:
-              </v-col>
-              <v-col>{{ $store.getters.currentStation.current_song }}</v-col>
-              <v-col class="text-right" tag="strong" cols="6">
-                Genre:
-              </v-col>
-              <v-col>{{ $store.getters.currentStation.genre }}</v-col>
-              <v-col class="text-right" tag="strong" cols="6">
-                Country:
-              </v-col>
-              <v-col>{{ $store.getters.currentStation.country }}</v-col>
-              <v-col class="text-right" tag="strong" cols="6">
-                Bitrate:
-              </v-col>
-              <v-col>{{ $store.getters.currentStation.bitrate }}kbps</v-col>
-              <v-col class="text-right" tag="strong" cols="6">
-                Website:
-              </v-col>
-              <v-col>
-                <a :href="`${$store.getters.currentStation.website}`" target="_blank">{{ $store.getters.currentStation.website }}</a>
-              </v-col>
-              <v-col class="text-right" tag="strong" cols="6">
-                Stream:
-              </v-col>
-              <v-col>
-                <a :href="`${$store.getters.currentStation.src}`" target="_blank">{{ $store.getters.currentStation.src }}</a>
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-scroll-y-transition>
+        <current-station @show-edit-station-dialog="showEditStationDialog"/>
       </v-col>
     </v-row>
 
     <v-dialog v-model="addStationDialog" width="50%" persistent>
       <v-card>
-        <v-card-title>Add new station</v-card-title>
+        <v-card-title>{{ $t('newRadio.title') }}</v-card-title>
         <station-form :station="editStation"/>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="error" @click="addStationDialog = false">Close</v-btn>
-          <v-btn color="success" @click="addNewStation">Add</v-btn>
+          <v-btn color="error" @click="addStationDialog = false">{{ $t('radio.closeButton') }}</v-btn>
+          <v-btn color="success" @click="addNewStation">{{ $t('radio.addButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <v-dialog v-model="editStationDialog" width="50%" persistent>
       <v-card>
-        <v-card-title>Edit station</v-card-title>
+        <v-card-title>{{ $t('newRadio.titleEdit') }}</v-card-title>
         <station-form :station="editStation"/>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="error" @click="editStationDialog = false">Close</v-btn>
-          <v-btn color="success" @click="updateStation">Save</v-btn>
+          <v-btn color="error" @click="editStationDialog = false">{{ $t('radio.closeButton') }}</v-btn>
+          <v-btn color="success" @click="updateStation">{{ $t('radio.saveButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <v-dialog v-model="addGenreDialog" width="50%" persistent>
       <v-card>
-        <v-card-title>Add new genre</v-card-title>
+        <v-card-title>{{ $t('newGenre.title') }}</v-card-title>
         <v-card-text>
           <v-row>
             <v-col>
-              <v-text-field dense label="Genre" v-model="genre"/>
+              <v-text-field dense :label="$t('newGenre.name')" v-model="genre"/>
             </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="error" @click="addGenreDialog = false">Close</v-btn>
-          <v-btn color="success" @click="addNewGenre" :disabled="genre === ''">Add</v-btn>
+          <v-btn color="error" @click="addGenreDialog = false">{{ $t('radio.closeButton') }}</v-btn>
+          <v-btn color="success" @click="addNewGenre" :disabled="genre === ''">{{ $t('radio.addButton') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="settingsDialog" width="50%" persistent>
+      <v-card>
+        <v-card-title>{{ $t('settings.title') }}</v-card-title>
+        <settings-form :settings="settings"/>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn color="error" @click="settingsDialog = false">{{ $t('radio.closeButton') }}</v-btn>
+          <v-btn color="success" @click="saveSettings">{{ $t('radio.saveButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -160,14 +130,17 @@
 
 <script>
 // @ is an alias to /src
-import StationForm from "@/components/StationForm";
-const size = 30
-const tempo = 180 //bpm
+import StationForm from "@/components/StationForm"
+import CurrentStation from "@/components/CurrentStation"
+import SettingsForm from "@/components/SettingsForm"
+
 export default {
   name: 'Home',
-  components: {StationForm},
+  components: {StationForm, CurrentStation, SettingsForm},
   mounted() {
-    this.updateBars()
+    if (localStorage.getItem('settings')) {
+      this.settings = JSON.parse(localStorage.getItem('settings'))
+    }
   },
   computed: {
     filter() {
@@ -188,22 +161,13 @@ export default {
       }
     }
   },
-  watch: {
-    '$store.getters.isPlaying'(value) {
-      if (value) {
-        this.timer = setInterval(this.updateBars, this.getDelay())
-      } else {
-        clearInterval(this.timer)
-      }
-    }
-  },
   data: () => ({
     addStationDialog: false,
     editStationDialog: false,
     addGenreDialog: false,
+    settingsDialog: false,
     showMenu: false,
     active: [],
-    bars: [],
     search: null,
     genre: '',
     editStation: {
@@ -217,23 +181,20 @@ export default {
       server_type: null,
       website: null,
     },
-    timer: null,
+    settings: {
+      locale: 'ru',
+    }
   }),
   methods: {
-    getBars() {
-      return new Array(size)
-          .fill(1)
-          .map(() => Math.ceil(Math.random() * (100 - 30) + 30));
-    },
-    updateBars() {
-      this.bars = this.getBars();
-    },
-    getDelay() {
-      return 60 * 1000 / tempo;
-    },
     playStation(stationId) {
-      const station = this.$store.getters.stations.find(st => st.id === stationId[0])
-      this.$store.commit('fillCurrentStation', station)
+      if (stationId[0]) {
+        const station = this.$store.getters.stations.find(st => st.id === stationId[0])
+        this.$store.commit('setPlaying', {state: true, station: station})
+        this.$store.commit('setCurrentSong', '')
+      } else {
+        this.$store.commit('setPlaying', {state: false})
+        this.$store.commit('setCurrentSong', 'Paused')
+      }
     },
     addNewStation() {
       this.$store.dispatch('addNewStation', this.editStation).then((response) => {
@@ -273,6 +234,12 @@ export default {
       this.editStation = Object.assign({}, this.$store.getters.currentStation)
       this.editStationDialog = true
     },
+    saveSettings() {
+      localStorage.setItem('settings', JSON.stringify(this.settings))
+      this.settingsDialog = false
+      this.$i18n.locale = this.settings.locale
+      this.$toast.success(this.$t('settings.saveSettingsText'))
+    },
     countWords(s) {
       s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
       s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
@@ -291,18 +258,6 @@ export default {
   width: 100%;
   max-height: 68vh;
   min-height: 66vh;
-}
-#container {
-  height: 28vh;
-}
-
-#equalizer {
-  width: 100%;
-  height: 100%;
-}
-.bar {
-  fill: url(#barBg) #9fea63;
-  transition: all .4s cubic-bezier(.71,.09,.55,1.14);
 }
 
 </style>

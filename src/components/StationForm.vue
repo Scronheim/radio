@@ -2,15 +2,15 @@
   <v-card-text>
     <v-row>
       <v-col>
-        <v-text-field dense label="Station name" v-model="station.name"/>
+        <v-text-field dense :label="$t('newRadio.name')" v-model="station.name"/>
       </v-col>
       <v-col>
-        <v-text-field dense label="Description" v-model="station.description"/>
+        <v-text-field dense :label="$t('newRadio.description')" v-model="station.description"/>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-autocomplete label="Genre" dense
+        <v-autocomplete :label="$t('newRadio.genre')" dense
                         :items="$store.getters.genres"
                         item-text="name"
                         item-value="name"
@@ -19,30 +19,35 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-text-field dense label="Stream url" v-model="station.src"/>
+        <v-text-field dense :label="$t('newRadio.src')" v-model="station.src"/>
       </v-col>
       <v-col>
-        <v-text-field dense label="Stream song url" v-model="station.song_src"/>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-text-field dense label="Country" v-model="station.country"/>
-      </v-col>
-      <v-col>
-        <v-text-field type="number" dense label="Bitrate (kbps)" v-model.number="station.bitrate"/>
+        <v-text-field dense :label="$t('newRadio.songSrc')" v-model="station.song_src"/>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-select dense label="Server type"
+        <v-text-field dense :label="$t('newRadio.country')" v-model="station.country"/>
+      </v-col>
+      <v-col>
+        <v-text-field type="number" dense :label="$t('newRadio.bitrate')" v-model.number="station.bitrate"/>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-select dense :label="$t('newRadio.serverType')"
                   v-model="station.server_type"
                   :items="$store.getters.serverTypes"/>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-text-field dense label="Website" v-model.number="station.website"/>
+        <v-text-field dense :label="$t('newRadio.website')" v-model.number="station.website"/>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-text-field dense :label="$t('newRadio.logoSrc')" v-model.number="station.logo_src"/>
       </v-col>
     </v-row>
   </v-card-text>
