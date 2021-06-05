@@ -59,12 +59,16 @@ export default {
         clearInterval(this.timer)
       }
       if (isPlaying) {
+        this.$store.commit('setPlaying', {state: true, station: this.$store.getters.currentStation})
+        this.$store.commit('setCurrentSong', '')
         this.timer = setInterval(() => {
           this.$store.dispatch('getCurrentSong', this.$store.getters.currentStation)
         }, 5000)
         this.player.element.load()
         this.player.element.play()
       } else {
+        this.$store.commit('setPlaying', {state: false})
+        this.$store.commit('setCurrentSong', 'Paused')
         this.player.element.pause()
       }
     },
@@ -80,6 +84,7 @@ export default {
         this.volume = 0
         this.player.element.volume = 0
       }
+      localStorage.setItem('volume', this.player.element.volume)
     }
   }
 }

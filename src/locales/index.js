@@ -9,6 +9,8 @@ const messages = {
       closeButton: 'Закрыть',
       pausedText: 'Остановлено',
       settingsButton: 'Настройки',
+      editText: 'Редактировать',
+      deleteText: 'Удалить',
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -24,10 +26,15 @@ const messages = {
       serverType: 'Тип сервера',
       website: 'Сайт',
       logoSrc: 'Ссылка на логотип',
+      saveStationText: 'Станция сохранена',
+      addStationText: 'Станция добавлена'
     },
     newGenre: {
       title: 'Добавить новый жанр',
+      titleEdit: 'Редактировать жанр',
       name: 'Жанр',
+      saveGenreText: 'Жанр сохранён',
+      addGenreText: 'Жанр добавлен'
     },
     settings: {
       title: 'Настройки',
@@ -46,6 +53,8 @@ const messages = {
       saveButton: 'Save',
       pausedText: 'Paused',
       settingsButton: 'Settings',
+      editText: 'Edit',
+      deleteText: 'Delete',
     },
     newRadio: {
       title: 'Add station',
@@ -60,11 +69,16 @@ const messages = {
       bitrate: 'Bitrate(kbps)',
       serverType: 'Server Type',
       website: 'Website',
-      logoSrc: 'Station Logo url'
+      logoSrc: 'Station Logo url',
+      saveStationText: 'Station saved',
+      addStationText: 'Station added'
     },
     newGenre: {
       title: 'Add genre',
+      titleEdit: 'Edit genre',
       name: 'Genre',
+      saveGenreText: 'Genre saved',
+      addGenreText: 'Genre added'
     },
     settings: {
       title: 'Settings',

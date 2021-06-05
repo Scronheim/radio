@@ -25,6 +25,13 @@ const i18n = new VueI18n({
   messages: messages
 })
 
+Vue.filter('getGenreText', function (value) {
+  if (!value) return ''
+  return store.getters.genres.find((genre) => {
+    return genre.id === value
+  }).name
+})
+
 Vue.use(Toast, {
   transition: "Vue-Toastification__bounce",
   maxToasts: 3,

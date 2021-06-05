@@ -13,7 +13,7 @@
         <v-autocomplete :label="$t('newRadio.genre')" dense
                         :items="$store.getters.genres"
                         item-text="name"
-                        item-value="name"
+                        item-value="id"
                         v-model="station.genre"/>
       </v-col>
     </v-row>

@@ -55,15 +55,39 @@
               :search="search"
               @update:active="playStation">
             <template v-slot:label="{item, open}">
-              <v-icon v-if="item.children" class="mr-2">
-                {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-              </v-icon>
-              <v-icon v-else class="mr-2">
-                mdi-radio
-              </v-icon>
-              {{ item.name }}
+              <v-btn text @contextmenu="showMenu($event, item)">
+                <v-icon v-if="item.children" class="mr-2">
+                  {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+                </v-icon>
+                <v-icon v-else class="mr-2">
+                  mdi-radio
+                </v-icon>
+                {{ item.name }}
+              </v-btn>
             </template>
           </v-treeview>
+          <v-menu v-model="menu" :position-x="x" :position-y="y" absolute offset-y>
+            <v-list dense>
+              <v-list-item dense link v-if="genre.id" @click="showAddStationDialog">
+                <v-list-item-icon>
+                  <v-icon color="success">mdi-plus</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>{{ $t('radio.addStation') }}</v-list-item-title>
+              </v-list-item>
+              <v-list-item dense link @click="showEditDialog">
+                <v-list-item-icon>
+                  <v-icon color="primary">mdi-pencil</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>{{ $t('radio.editText') }}</v-list-item-title>
+              </v-list-item>
+              <v-list-item dense link>
+                <v-list-item-icon>
+                  <v-icon color="error">mdi-delete</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>{{ $t('radio.deleteText') }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </div>
       </v-col>
       <v-divider vertical/>
@@ -99,17 +123,23 @@
     <v-dialog v-model="addGenreDialog" width="50%" persistent>
       <v-card>
         <v-card-title>{{ $t('newGenre.title') }}</v-card-title>
-        <v-card-text>
-          <v-row>
-            <v-col>
-              <v-text-field dense :label="$t('newGenre.name')" v-model="genre"/>
-            </v-col>
-          </v-row>
-        </v-card-text>
+        <genre-form :genre="genre"/>
         <v-card-actions>
           <v-spacer/>
           <v-btn color="error" @click="addGenreDialog = false">{{ $t('radio.closeButton') }}</v-btn>
-          <v-btn color="success" @click="addNewGenre" :disabled="genre === ''">{{ $t('radio.addButton') }}</v-btn>
+          <v-btn color="success" @click="addNewGenre" :disabled="genre.name === ''">{{ $t('radio.addButton') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="editGenreDialog" width="50%" persistent>
+      <v-card>
+        <v-card-title>{{ $t('newGenre.titleEdit') }}</v-card-title>
+        <genre-form :genre="genre"/>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn color="error" @click="editGenreDialog = false">{{ $t('radio.closeButton') }}</v-btn>
+          <v-btn color="success" @click="updateGenre" :disabled="genre.name === ''">{{ $t('radio.saveButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -131,12 +161,13 @@
 <script>
 // @ is an alias to /src
 import StationForm from "@/components/StationForm"
+import GenreForm from "@/components/GenreForm"
 import CurrentStation from "@/components/CurrentStation"
 import SettingsForm from "@/components/SettingsForm"
 
 export default {
   name: 'Home',
-  components: {StationForm, CurrentStation, SettingsForm},
+  components: {StationForm, GenreForm, CurrentStation, SettingsForm},
   mounted() {
     if (localStorage.getItem('settings')) {
       this.settings = JSON.parse(localStorage.getItem('settings'))
@@ -165,11 +196,15 @@ export default {
     addStationDialog: false,
     editStationDialog: false,
     addGenreDialog: false,
+    editGenreDialog: false,
     settingsDialog: false,
-    showMenu: false,
+    menu: false,
     active: [],
     search: null,
-    genre: '',
+    genre: {
+      id: 0,
+      name: '',
+    },
     editStation: {
       name: null,
       description: null,
@@ -179,13 +214,54 @@ export default {
       song_src: null,
       bitrate: null,
       server_type: null,
+      logo_src: null,
       website: null,
     },
     settings: {
       locale: 'ru',
-    }
+    },
+    x: 0,
+    y: 0,
   }),
   methods: {
+    showEditDialog() {
+      if (this.editStation.name) {
+        this.editStationDialog = true
+      } else {
+        this.editGenreDialog = true
+      }
+    },
+    showAddStationDialog() {
+      this.editStation.genre = this.genre.id
+      this.addStationDialog = true
+    },
+    showMenu(e, item) {
+      if (item.children) {
+        this.editStation = {
+          name: null,
+          description: null,
+          genre: null,
+          country: null,
+          src: null,
+          song_src: null,
+          bitrate: null,
+          server_type: null,
+          logo_src: null,
+          website: null,
+        }
+        this.genre = Object.assign({}, item)
+      } else {
+        this.genre = {
+          id: 0,
+          name: '',
+        }
+        this.editStation = Object.assign({}, item)
+      }
+      e.preventDefault()
+      this.x = e.clientX
+      this.y = e.clientY
+      this.menu = true
+    },
     playStation(stationId) {
       if (stationId[0]) {
         const station = this.$store.getters.stations.find(st => st.id === stationId[0])
@@ -201,7 +277,7 @@ export default {
         if (response.data.data.length > 0) {
           this.$store.dispatch('refresh')
           this.addStationDialog = false
-          this.$toast.success('Station added')
+          this.$toast.success(this.$t('newRadio.addStationText'))
         }
       }).catch((error) => {
         this.$toast.error(error.response.data.error)
@@ -212,8 +288,7 @@ export default {
         if (response.data.data === 1) {
           this.$store.dispatch('refresh')
           this.editStationDialog = false
-          this.$store.commit('fillCurrentStation', this.editStation)
-          this.$toast.success('Station updated')
+          this.$toast.success(this.$t('newRadio.saveStationText'))
         }
       }).catch((error) => {
         this.$toast.error(error.response.data.error)
@@ -224,10 +299,18 @@ export default {
         if (response.data.success) {
           this.$store.dispatch('refresh')
           this.addGenreDialog = false
-          this.$toast.success('Genre added')
+          this.$toast.success(this.$t('newRadio.addGenreText'))
         }
       }).catch((error) => {
         this.$toast.error(error.response.data.error)
+      })
+    },
+    updateGenre() {
+      delete this.genre.children
+      this.$store.dispatch('updateGenre', this.genre).then(() => {
+        this.$toast.success(this.$t('newGenre.saveGenreText'))
+        this.$store.dispatch('refresh')
+        this.editGenreDialog = false
       })
     },
     showEditStationDialog() {

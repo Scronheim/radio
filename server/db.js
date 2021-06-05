@@ -41,6 +41,10 @@ class DB {
     return this.db(GENRES_TABLE).insert(genre)
   }
 
+  updateGenre(genre) {
+    return this.db(GENRES_TABLE).where('id', '=', genre.id).update(genre)
+  }
+
   updateStation(station) {
     return this.db(STATIONS_TABLE).where('id', '=', station.id).update(station)
   }

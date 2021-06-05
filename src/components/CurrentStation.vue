@@ -49,7 +49,7 @@
       <v-col class="text-right" tag="strong" cols="6">
         {{ $t('newRadio.genre') }}:
       </v-col>
-      <v-col>{{ $store.getters.currentStation.genre }}</v-col>
+      <v-col>{{ $store.getters.currentStation.genre | getGenreText }}</v-col>
       <v-col class="text-right" tag="strong" cols="6">
         {{ $t('newRadio.country') }}:
       </v-col>

@@ -34,7 +34,7 @@ export default new Vuex.Store({
       state.categories = []
       state.genres.forEach((genre) => {
         const stations = state.stations.filter((st) => {
-          return st.genre === genre.name
+          return st.genre === genre.id
         })
         if (stations.length > 0) {
           state.categories.push({
@@ -71,6 +71,9 @@ export default new Vuex.Store({
     },
     async addNewGenre(context, payload) {
       return await axios.post(`${context.state.apiHost}/api/genres`, payload)
+    },
+    async updateGenre(context, payload) {
+      return await axios.patch(`${context.state.apiHost}/api/genres`, payload)
     },
     getCurrentSong(context, station) {
       axios.post(`${context.state.apiHost}/api/current_song`, station).then((response) => {

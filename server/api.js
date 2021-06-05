@@ -48,6 +48,14 @@ router.route('/api/genres')
       jsonResponse(res, null, error.sqlMessage, false)
     })
 })
+  .patch((req, res) => {
+    db.updateGenre(req.body).then((response) => {
+
+      jsonResponse(res, response)
+    }).catch((error) => {
+      jsonResponse(res, null, error.sqlMessage, false)
+    })
+  })
 
 router.post('/api/current_song', async (req, res) => {
   const serverType = req.body.server_type
