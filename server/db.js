@@ -45,6 +45,14 @@ class DB {
     return this.db(GENRES_TABLE).where('id', '=', genre.id).update(genre)
   }
 
+  deleteGenre(id) {
+    return this.db(GENRES_TABLE).where('id', id).delete()
+  }
+
+  deleteStation(id) {
+    return this.db(STATIONS_TABLE).where('id', id).delete()
+  }
+
   updateStation(station) {
     return this.db(STATIONS_TABLE).where('id', '=', station.id).update(station)
   }

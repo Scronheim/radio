@@ -50,12 +50,28 @@ router.route('/api/genres')
 })
   .patch((req, res) => {
     db.updateGenre(req.body).then((response) => {
-
       jsonResponse(res, response)
     }).catch((error) => {
       jsonResponse(res, null, error.sqlMessage, false)
     })
   })
+
+router.delete('/api/stations/:id', (req, res) => {
+  db.deleteStation(req.params.id).then((response) => {
+    jsonResponse(res, response)
+  }).catch((error) => {
+    jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
+  })
+})
+
+
+router.delete('/api/genres/:id', (req, res) => {
+  db.deleteGenre(req.params.id).then((response) => {
+    jsonResponse(res, response)
+  }).catch((error) => {
+    jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
+  })
+})
 
 router.post('/api/current_song', async (req, res) => {
   const serverType = req.body.server_type

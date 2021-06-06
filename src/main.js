@@ -25,7 +25,15 @@ const i18n = new VueI18n({
   messages: messages
 })
 
-Vue.filter('getGenreText', function (value) {
+Vue.filter('truncate', function(text, length, clamp) {
+  clamp = clamp || '...'
+  let node = document.createElement('div');
+  node.innerHTML = text
+  let content = node.textContent
+  return content.length > length ? content.slice(0, length) + clamp : content;
+})
+
+Vue.filter('getGenreText', function(value) {
   if (!value) return ''
   return store.getters.genres.find((genre) => {
     return genre.id === value

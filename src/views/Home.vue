@@ -44,28 +44,77 @@
               clear-icon="mdi-close-circle-outline"/>
         </v-sheet>
         <div class="scroll">
-          <v-treeview
-              activatable
-              dense
-              open-on-click
-              transition
-              :active.sync="active"
-              :items="$store.getters.categories"
-              :filter="filter"
-              :search="search"
-              @update:active="playStation">
-            <template v-slot:label="{item, open}">
-              <v-btn text @contextmenu="showMenu($event, item)">
-                <v-icon v-if="item.children" class="mr-2">
-                  {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                </v-icon>
-                <v-icon v-else class="mr-2">
-                  mdi-radio
-                </v-icon>
-                {{ item.name }}
-              </v-btn>
-            </template>
-          </v-treeview>
+          <v-list dense>
+            <v-list-group no-action @change="folderIcon = 'mdi-folder'">
+              <template v-slot:activator>
+                <v-list-item-icon>
+                  <v-icon size="28">mdi-thumb-up</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-btn text>{{ $t('radio.favorites') }}</v-btn>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </template>
+
+              <v-list-item dense class="pl-0">
+                <v-list-item-content>
+                  <v-list v-if="$store.getters.favorites.length > 0">
+                    <v-list-item dense v-for="(fav, index) in $store.getters.favorites" :key="fav.id">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          <v-btn text @contextmenu="showMenu($event, fav, index)" @click="playStation([fav.id])">
+                            {{ fav.name }}
+                          </v-btn>
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                  <p v-else class="text-center">{{ $t('radio.noFavoritesText') }}</p>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+            <v-list-group no-action :value="true" @change="changeFolderIcon">
+              <template v-slot:activator>
+                <v-list-item-icon>
+                  <v-icon size="28">{{ folderIcon }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-btn text>{{ $t('radio.catalog') }}</v-btn>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </template>
+
+              <v-list-item dense class="pl-5">
+                <v-list-item-content>
+                  <v-treeview
+                      activatable
+                      dense
+                      open-on-click
+                      transition
+                      :active.sync="active"
+                      :items="$store.getters.categories"
+                      :filter="filter"
+                      :search="search"
+                      @update:active="playStation">
+                    <template v-slot:label="{item, open}">
+                      <v-btn text @contextmenu="showMenu($event, item)" :title="`${item.name}`">
+                        <v-icon v-if="item.children" class="mr-2">
+                          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+                        </v-icon>
+                        <v-icon v-else class="mr-2">
+                          mdi-radio
+                        </v-icon>
+                        {{ item.name }}
+                      </v-btn>
+                    </template>
+                  </v-treeview>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+          </v-list>
+
           <v-menu v-model="menu" :position-x="x" :position-y="y" absolute offset-y>
             <v-list dense>
               <v-list-item dense link v-if="genre.id" @click="showAddStationDialog">
@@ -74,13 +123,19 @@
                 </v-list-item-icon>
                 <v-list-item-title>{{ $t('radio.addStation') }}</v-list-item-title>
               </v-list-item>
+              <v-list-item dense link @click="toggleFavorites" v-if="editStation.id">
+                <v-list-item-icon>
+                  <v-icon color="yellow">{{ stationInFavorites ? 'mdi-thumb-down': 'mdi-thumb-up' }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>{{ stationInFavorites ? $t('radio.deleteFavoritesText'): $t('radio.addFavoritesText') }}</v-list-item-title>
+              </v-list-item>
               <v-list-item dense link @click="showEditDialog">
                 <v-list-item-icon>
                   <v-icon color="primary">mdi-pencil</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>{{ $t('radio.editText') }}</v-list-item-title>
               </v-list-item>
-              <v-list-item dense link>
+              <v-list-item dense link @click="remove">
                 <v-list-item-icon>
                   <v-icon color="error">mdi-delete</v-icon>
                 </v-list-item-icon>
@@ -88,6 +143,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
+
         </div>
       </v-col>
       <v-divider vertical/>
@@ -174,6 +230,11 @@ export default {
     }
   },
   computed: {
+    stationInFavorites() {
+      return this.$store.getters.favorites.find((st) => {
+        return st.id === this.editStation.id
+      })
+    },
     filter() {
       return (item, search, textKey) => item[textKey].toUpperCase().indexOf(search.toUpperCase()) > -1
     },
@@ -193,6 +254,7 @@ export default {
     }
   },
   data: () => ({
+    activeList: false,
     addStationDialog: false,
     editStationDialog: false,
     addGenreDialog: false,
@@ -217,13 +279,61 @@ export default {
       logo_src: null,
       website: null,
     },
+    selectedStationIndex: null,
     settings: {
       locale: 'ru',
     },
     x: 0,
     y: 0,
+    folderIcon: 'mdi-folder-open'
   }),
   methods: {
+    deleteFav(index) {
+      this.$store.dispatch('deleteFavorite', index)
+      this.$toast.success(this.$t('newRadio.deleteStationText'))
+    },
+    toggleFavorites() {
+      const station = this.$store.getters.favorites.find((st) => {
+        return st.id === this.editStation.id
+      })
+      if (station) {
+        console.log(this.selectedStationIndex)
+        this.$store.dispatch('deleteFavorite', this.selectedStationIndex)
+      } else {
+        this.$store.commit('addFavorite', this.editStation)
+      }
+      this.$store.dispatch('saveFavorites')
+    },
+    changeFolderIcon() {
+      if (this.folderIcon === 'mdi-folder-open') {
+        this.folderIcon = 'mdi-folder'
+      } else {
+        this.folderIcon = 'mdi-folder-open'
+      }
+    },
+    remove() {
+      if (confirm(`${this.$t('radio.deleteConfirmText')}`)) {
+        if (this.genre.id) {
+          this.$store.dispatch('deleteGenre', this.genre).then(() => {
+            this.$store.dispatch('refresh')
+            this.$toast.success(this.$t('newRadio.deleteGenreText'))
+          }).catch((error) => {
+            if (error.response.data.error.code === 1451) {
+              this.$toast.error(this.$t('radio.foreignKeyErrorText'))
+            } else {
+              this.$toast.error(error.response.data.error.message)
+            }
+          })
+        } else {
+          this.$store.dispatch('deleteStation', this.editStation).then(() => {
+            this.$store.dispatch('refresh')
+            this.$toast.success(this.$t('newRadio.deleteStationText'))
+          }).catch((error) => {
+            this.$toast.error(error.response.data.error.message)
+          })
+        }
+      }
+    },
     showEditDialog() {
       if (this.editStation.name) {
         this.editStationDialog = true
@@ -232,10 +342,22 @@ export default {
       }
     },
     showAddStationDialog() {
+      this.editStation = {
+        name: null,
+        description: null,
+        genre: null,
+        country: null,
+        src: null,
+        song_src: null,
+        bitrate: null,
+        server_type: null,
+        logo_src: null,
+        website: null,
+      }
       this.editStation.genre = this.genre.id
       this.addStationDialog = true
     },
-    showMenu(e, item) {
+    showMenu(e, item, index) {
       if (item.children) {
         this.editStation = {
           name: null,
@@ -255,6 +377,7 @@ export default {
           id: 0,
           name: '',
         }
+        this.selectedStationIndex = index
         this.editStation = Object.assign({}, item)
       }
       e.preventDefault()

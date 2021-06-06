@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    favorites: [],
     stations: [],
     genres: [],
     currentStation: {
@@ -47,15 +48,36 @@ export default new Vuex.Store({
     },
     setCurrentSong(state, payload) {
       state.currentSong = payload
-    }
+    },
+    addFavorite(state, payload) {
+      state.favorites.push(payload)
+    },
+    setFavorites(state, payload) {
+      state.favorites = payload
+    },
   },
   actions: {
     refresh(context) {
       Promise.all([context.dispatch('getStations'), context.dispatch('getGenres')]).then((response) => {
+        context.dispatch('getFavorites')
         context.commit('fillStations', response[0].data.data)
         context.commit('fillGenres', response[1].data.data)
         context.commit('fillCategories')
       })
+    },
+    getFavorites(context) {
+      let fav = localStorage.getItem('favorites')
+      if (fav) {
+        fav = JSON.parse(fav)
+        context.commit('setFavorites', fav)
+      }
+    },
+    saveFavorites(context) {
+      localStorage.setItem('favorites', JSON.stringify(context.state.favorites))
+    },
+    deleteFavorite(context, index) {
+      context.state.favorites.splice(index)
+      localStorage.setItem('favorites', JSON.stringify(context.state.favorites))
     },
     getStations(context) {
       return axios.get(`${context.state.apiHost}/api/stations`)
@@ -66,6 +88,9 @@ export default new Vuex.Store({
     async updateStation(context, payload) {
       return await axios.patch(`${context.state.apiHost}/api/stations`, payload)
     },
+    async deleteStation(context, payload) {
+      return await axios.delete(`${context.state.apiHost}/api/stations/${payload.id}`)
+    },
     getGenres(context) {
       return axios.get(`${context.state.apiHost}/api/genres`)
     },
@@ -75,13 +100,17 @@ export default new Vuex.Store({
     async updateGenre(context, payload) {
       return await axios.patch(`${context.state.apiHost}/api/genres`, payload)
     },
+    async deleteGenre(context, payload) {
+      return await axios.delete(`${context.state.apiHost}/api/genres/${payload.id}`)
+    },
     getCurrentSong(context, station) {
       axios.post(`${context.state.apiHost}/api/current_song`, station).then((response) => {
         context.commit('setCurrentSong', response.data.data)
       })
-    }
+    },
   },
   getters: {
+    favorites: state => state.favorites,
     stations: state => state.stations,
     genres: state => state.genres,
     categories: state => state.categories,

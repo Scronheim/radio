@@ -11,6 +11,13 @@ const messages = {
       settingsButton: 'Настройки',
       editText: 'Редактировать',
       deleteText: 'Удалить',
+      foreignKeyErrorText: 'Нельзя удалять жанр, не удалив все станции',
+      deleteConfirmText: 'Вы действительно хотите удалить это?',
+      favorites: 'Избранное',
+      addFavoritesText: 'Добавить в избранное',
+      deleteFavoritesText: 'Убрать из избранного',
+      noFavoritesText: 'Избранных станций пока нет',
+      catalog: 'Каталог станций',
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -27,14 +34,16 @@ const messages = {
       website: 'Сайт',
       logoSrc: 'Ссылка на логотип',
       saveStationText: 'Станция сохранена',
-      addStationText: 'Станция добавлена'
+      addStationText: 'Станция добавлена',
+      deleteStationText: 'Станция удалена',
     },
     newGenre: {
       title: 'Добавить новый жанр',
       titleEdit: 'Редактировать жанр',
       name: 'Жанр',
       saveGenreText: 'Жанр сохранён',
-      addGenreText: 'Жанр добавлен'
+      addGenreText: 'Жанр добавлен',
+      deleteGenreText: 'Жанр удалён'
     },
     settings: {
       title: 'Настройки',
@@ -55,6 +64,13 @@ const messages = {
       settingsButton: 'Settings',
       editText: 'Edit',
       deleteText: 'Delete',
+      foreignKeyErrorText: 'You cannot delete genre with stations',
+      deleteConfirmText: 'You really wanna delete this?',
+      favorites: 'Favorites',
+      addFavoritesText: 'Add favorites',
+      deleteFavoritesText: 'Delete from favorites',
+      noFavoritesText: 'No Favorites',
+      catalog: 'Catalog',
     },
     newRadio: {
       title: 'Add station',
@@ -71,14 +87,16 @@ const messages = {
       website: 'Website',
       logoSrc: 'Station Logo url',
       saveStationText: 'Station saved',
-      addStationText: 'Station added'
+      addStationText: 'Station added',
+      deleteStationText: 'Station deleted',
     },
     newGenre: {
       title: 'Add genre',
       titleEdit: 'Edit genre',
       name: 'Genre',
       saveGenreText: 'Genre saved',
-      addGenreText: 'Genre added'
+      addGenreText: 'Genre added',
+      deleteGenreText: 'Genre deleted'
     },
     settings: {
       title: 'Settings',
