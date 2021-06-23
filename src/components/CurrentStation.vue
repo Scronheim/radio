@@ -7,7 +7,8 @@
       </v-icon>
     </v-btn>
     <v-card-text>
-      <v-img v-if="$store.getters.currentStation.logo_src" :height="200" contain :src="$store.getters.currentStation.logo_src"/>
+      <v-img v-if="$store.getters.currentStation.logo_blob" :height="200" contain :src="$store.getters.currentStation.logo_blob"/>
+      <v-img v-else-if="$store.getters.currentStation.logo_src" :height="200" contain :src="$store.getters.currentStation.logo_src"/>
       <h3 class="text-h5 mb-2">
         {{ $store.getters.currentStation.name }}
       </h3>
@@ -64,20 +65,16 @@
       <v-col>
         <a :href="`${$store.getters.currentStation.website}`" target="_blank">{{ $store.getters.currentStation.website }}</a>
       </v-col>
-      <v-col class="text-right" tag="strong" cols="6">
-        {{ $t('newRadio.src') }}:
-      </v-col>
-      <v-col>
-        <a :href="`${$store.getters.currentStation.src}`" target="_blank">{{ $store.getters.currentStation.src }}</a>
-      </v-col>
     </v-row>
   </v-card>
 </template>
 
 <script>
 import ClipLoader from 'vue-spinner/src/ClipLoader'
+
 const size = 30
-const tempo = 180 //bpm
+const tempo = 200 //bpm
+
 export default {
   name: "CurrentStation",
   components: {ClipLoader},
@@ -91,7 +88,7 @@ export default {
       } else {
         clearInterval(this.timer)
       }
-    }
+    },
   },
   data: () => ({
     bars: [],
@@ -118,7 +115,7 @@ export default {
 
 <style scoped>
 #container {
-  height: 22vh;
+  height: 20vh;
 }
 
 #equalizer {

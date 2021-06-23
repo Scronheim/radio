@@ -1,10 +1,12 @@
 'use strict'
-
-import { app, protocol, BrowserWindow, Menu } from 'electron'
+import { app, protocol, ipcMain, BrowserWindow, Menu } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const version = require('../package.json').version
+const fs = require('fs')
+const path = require('path')
+
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -18,14 +20,13 @@ async function createWindow() {
     height: 1000,
     title: `Radio v${version}`,
     webPreferences: {
-
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
+      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      webSecurity: false
     }
   })
-
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -35,8 +36,11 @@ async function createWindow() {
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+  win.webContents.on('new-window', function(e, url) {
+    e.preventDefault();
+    require('electron').shell.openExternal(url);
+  })
 }
-
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
@@ -52,6 +56,18 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
 
+const imagePath = path.join(app.getPath('userData'), 'images')
+ipcMain.handle('read-station-logo', async (event, id) => {
+  const files = fs.readdirSync(imagePath)
+  for (const file of files) {
+    const basename = parseInt(file.split('.')[0])
+    if (basename !== id) {
+      continue
+    }
+    return fs.promises.readFile(`${imagePath}/${file}`)
+  }
+})
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -64,12 +80,20 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
-  let updateApp = require('update-electron-app');
+  ipcMain.on('save-file', (ev, payload) => {
+    if (!fs.existsSync(imagePath)) {
+      fs.mkdir(imagePath, function (err) {
+        if (err) {
+          console.log('Directory not created')
+        } else {
+          fs.writeFileSync(`${imagePath}/${payload.name}`, new Buffer(payload.buffer))
+        }
+      })
+    } else {
+      fs.writeFileSync(`${imagePath}/${payload.name}`, new Buffer(payload.buffer))
+    }
+  })
 
-  updateApp({
-    updateInterval: '1 hour',
-    notifyUser: true
-  });
   createWindow()
 })
 

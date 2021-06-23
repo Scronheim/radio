@@ -203,7 +203,7 @@
     <v-dialog v-model="settingsDialog" width="50%" persistent>
       <v-card>
         <v-card-title>{{ $t('settings.title') }}</v-card-title>
-        <settings-form :settings="settings"/>
+        <settings-form/>
         <v-card-actions>
           <v-spacer/>
           <v-btn color="error" @click="settingsDialog = false">{{ $t('radio.closeButton') }}</v-btn>
@@ -224,11 +224,6 @@ import SettingsForm from "@/components/SettingsForm"
 export default {
   name: 'Home',
   components: {StationForm, GenreForm, CurrentStation, SettingsForm},
-  mounted() {
-    if (localStorage.getItem('settings')) {
-      this.settings = JSON.parse(localStorage.getItem('settings'))
-    }
-  },
   computed: {
     stationInFavorites() {
       return this.$store.getters.favorites.find((st) => {
@@ -280,9 +275,6 @@ export default {
       website: null,
     },
     selectedStationIndex: null,
-    settings: {
-      locale: 'ru',
-    },
     x: 0,
     y: 0,
     folderIcon: 'mdi-folder-open'
@@ -297,7 +289,6 @@ export default {
         return st.id === this.editStation.id
       })
       if (station) {
-        console.log(this.selectedStationIndex)
         this.$store.dispatch('deleteFavorite', this.selectedStationIndex)
       } else {
         this.$store.commit('addFavorite', this.editStation)
@@ -336,6 +327,7 @@ export default {
     },
     showEditDialog() {
       if (this.editStation.name) {
+        delete this.editStation.logo_blob
         this.editStationDialog = true
       } else {
         this.editGenreDialog = true
@@ -369,6 +361,7 @@ export default {
           bitrate: null,
           server_type: null,
           logo_src: null,
+          logo_blob: null,
           website: null,
         }
         this.genre = Object.assign({}, item)
@@ -378,6 +371,7 @@ export default {
           name: '',
         }
         this.selectedStationIndex = index
+        delete item.logo_blob
         this.editStation = Object.assign({}, item)
       }
       e.preventDefault()
@@ -390,6 +384,7 @@ export default {
         const station = this.$store.getters.stations.find(st => st.id === stationId[0])
         this.$store.commit('setPlaying', {state: true, station: station})
         this.$store.commit('setCurrentSong', '')
+        this.$store.dispatch('scanStationLogo')
       } else {
         this.$store.commit('setPlaying', {state: false})
         this.$store.commit('setCurrentSong', 'Paused')
@@ -441,9 +436,9 @@ export default {
       this.editStationDialog = true
     },
     saveSettings() {
-      localStorage.setItem('settings', JSON.stringify(this.settings))
+      this.$store.dispatch('saveSettings')
       this.settingsDialog = false
-      this.$i18n.locale = this.settings.locale
+      this.$i18n.locale = this.$store.getters.settings.locale
       this.$toast.success(this.$t('settings.saveSettingsText'))
     },
     countWords(s) {
