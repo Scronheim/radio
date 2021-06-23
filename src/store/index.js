@@ -18,9 +18,10 @@ export default new Vuex.Store({
       locale: 'ru'
     },
     categories: [],
-    serverTypes: ['icecast', 'shoutcast'],
+    serverTypes: ['icecast', 'shoutcast', '101.ru'],
     isPlaying: false,
     apiHost: 'http://176.57.214.6:3001',
+    wsHost: 'ws://176.57.214.6:8080',
     currentSong: '',
   },
   mutations: {
@@ -133,9 +134,13 @@ export default new Vuex.Store({
       return await axios.delete(`${context.state.apiHost}/api/genres/${payload.id}`)
     },
     getCurrentSong(context, station) {
-      axios.post(`${context.state.apiHost}/api/current_song`, station).then((response) => {
-        context.commit('setCurrentSong', response.data.data)
-      })
+      const ws = new WebSocket(`${context.state.wsHost}`)
+      ws.onopen = function () {
+        ws.send(station)
+      }
+      // axios.post(`${context.state.apiHost}/api/current_song`, station).then((response) => {
+      //   context.commit('setCurrentSong', response.data.data)
+      // })
     },
   },
   getters: {

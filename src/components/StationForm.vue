@@ -39,15 +39,18 @@
                   v-model="station.server_type"
                   :items="$store.getters.serverTypes"/>
       </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-text-field dense :label="$t('newRadio.website')" v-model.number="station.website"/>
+      <v-col v-if="station.server_type === '101.ru'">
+        <v-text-field dense :label="$t('newRadio.101_channel_id')" v-model.number="station['101_channel_id']"/>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-text-field dense :label="$t('newRadio.logoSrc')" v-model.number="station.logo_src"/>
+        <v-text-field dense :label="$t('newRadio.website')" v-model="station.website"/>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-text-field dense :label="$t('newRadio.logoSrc')" v-model="station.logo_src"/>
       </v-col>
       {{ $t('radio.or') }}
       <v-col>

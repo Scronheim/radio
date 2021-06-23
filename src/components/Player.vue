@@ -63,9 +63,7 @@ export default {
       if (isPlaying) {
         this.$store.commit('setPlaying', {state: true, station: this.$store.getters.currentStation})
         this.$store.commit('setCurrentSong', '')
-        this.timer = setInterval(() => {
-          this.$store.dispatch('getCurrentSong', this.$store.getters.currentStation)
-        }, 5000)
+        this.$store.dispatch('getCurrentSong', this.$store.getters.currentStation)
         this.player.element.load()
         this.player.element.play()
       } else {
