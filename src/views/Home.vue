@@ -413,7 +413,7 @@ export default {
       })
     },
     addNewGenre() {
-      this.$store.dispatch('addNewGenre', {name: this.genre}).then((response) => {
+      this.$store.dispatch('addNewGenre', {name: this.genre.name}).then((response) => {
         if (response.data.success) {
           this.$store.dispatch('refresh')
           this.addGenreDialog = false

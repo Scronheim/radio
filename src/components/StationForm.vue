@@ -42,6 +42,9 @@
       <v-col v-if="station.server_type === '101.ru'">
         <v-text-field dense :label="$t('newRadio.101_channel_id')" v-model.number="station['101_channel_id']"/>
       </v-col>
+      <v-col v-else-if="station.server_type === 'icecast'">
+        <v-text-field dense :label="$t('newRadio.icecast_song_field_number')" v-model.number="station.icecast_song_field_number"/>
+      </v-col>
     </v-row>
     <v-row>
       <v-col>

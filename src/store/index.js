@@ -23,12 +23,25 @@ export default new Vuex.Store({
     apiHost: 'http://176.57.214.6:3001',
     wsHost: 'ws://176.57.214.6:8080',
     currentSong: '',
+    webSocket: null,
+    currentSongTimer: null,
   },
   mutations: {
     setPlaying(state, payload) {
       state.isPlaying = payload.state
       if (payload.station) {
         state.currentStation = payload.station
+      }
+      if (payload.state) {
+        state.currentSongTimer = setInterval(() => {
+          const payload = {
+            event: 'getCurrentTrack',
+            station: state.currentStation
+          }
+          state.webSocket.send(JSON.stringify(payload))
+        }, 5000)
+      } else {
+        clearInterval(state.currentSongTimer)
       }
     },
     fillStations(state, payload) {
@@ -69,6 +82,12 @@ export default new Vuex.Store({
     },
     setCurrentStationLogoBlob(state, payload) {
       state.currentStation.logo_blob = payload
+    },
+    setWebSocket(state) {
+      state.webSocket = new WebSocket(`${state.wsHost}`)
+    },
+    setCurrentSongTimer(state, payload) {
+      state.currentSongTimer = payload
     }
   },
   actions: {
@@ -133,15 +152,6 @@ export default new Vuex.Store({
     async deleteGenre(context, payload) {
       return await axios.delete(`${context.state.apiHost}/api/genres/${payload.id}`)
     },
-    getCurrentSong(context, station) {
-      const ws = new WebSocket(`${context.state.wsHost}`)
-      ws.onopen = function () {
-        ws.send(station)
-      }
-      // axios.post(`${context.state.apiHost}/api/current_song`, station).then((response) => {
-      //   context.commit('setCurrentSong', response.data.data)
-      // })
-    },
   },
   getters: {
     favorites: state => state.favorites,
@@ -152,8 +162,7 @@ export default new Vuex.Store({
     currentSong: state => state.currentSong,
     serverTypes: state => state.serverTypes,
     isPlaying: state => state.isPlaying,
-    settings: state => state.settings
+    settings: state => state.settings,
+    webSocket: state => state.webSocket
   },
-  modules: {
-  }
 })

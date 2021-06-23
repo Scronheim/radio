@@ -17,6 +17,7 @@ export default {
   mounted() {
     this.$vuetify.theme.dark = true
     this.$store.dispatch('refresh')
+    this.$store.commit('setWebSocket')
   },
 };
 </script>

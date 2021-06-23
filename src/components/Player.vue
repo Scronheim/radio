@@ -37,12 +37,6 @@ export default {
     }
   },
   watch: {
-    '$store.state.currentStation'() {
-      this.play(true)
-    },
-    '$store.state.isPlaying'(value) {
-      this.play(value)
-    },
     '$store.state.settings.volume'(volume) {
       this.player.element.volume = volume
       this.volume = this.player.element.volume * 100
@@ -57,19 +51,16 @@ export default {
   }),
   methods: {
     play(isPlaying) {
-      if (this.timer) {
-        clearInterval(this.timer)
-      }
       if (isPlaying) {
         this.$store.commit('setPlaying', {state: true, station: this.$store.getters.currentStation})
         this.$store.commit('setCurrentSong', '')
-        this.$store.dispatch('getCurrentSong', this.$store.getters.currentStation)
+        this.$store.dispatch('scanStationLogo')
         this.player.element.load()
         this.player.element.play()
       } else {
+        this.player.element.pause()
         this.$store.commit('setPlaying', {state: false})
         this.$store.commit('setCurrentSong', 'Paused')
-        this.player.element.pause()
       }
     },
     changeVolume(value) {
