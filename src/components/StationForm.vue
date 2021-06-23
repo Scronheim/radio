@@ -49,11 +49,17 @@
       <v-col>
         <v-text-field dense :label="$t('newRadio.logoSrc')" v-model.number="station.logo_src"/>
       </v-col>
+      {{ $t('radio.or') }}
+      <v-col>
+        <v-file-input dense :label="$t('newRadio.uploadLogoText')" v-model="logoFile"
+                      @change="saveStationLogo"/>
+      </v-col>
     </v-row>
   </v-card-text>
 </template>
 
 <script>
+const {ipcRenderer} = require("electron")
 export default {
   name: "StationForm",
   props: {
@@ -62,6 +68,40 @@ export default {
       required: true
     }
   },
+  watch: {
+    '$store.getters.currentStation.id'() {
+      this.logoFile = null
+    },
+  },
+  data: () => ({
+    logoFile: null,
+  }),
+  methods: {
+    saveStationLogo() {
+      this.fileToArrayBuffer().then((response) => {
+        const payload = {
+          name: `${this.station.id}.${/[^.]+$/.exec(this.logoFile.name)}`,
+          buffer: response
+        }
+        ipcRenderer.send('save-file', payload)
+        this.$store.dispatch('scanStationLogo')
+      })
+    },
+    fileToArrayBuffer() {
+      return new Promise((resolve, reject) => {
+        try {
+          let reader = new FileReader();
+          reader.readAsArrayBuffer(this.logoFile);
+          reader.onloadend = () => {
+            resolve(reader.result);
+          }
+        }
+        catch (e) {
+          reject(e);
+        }
+      })
+    },
+  }
 }
 </script>
 

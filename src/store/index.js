@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import { ipcRenderer } from 'electron'
 
 Vue.use(Vuex)
 
@@ -10,7 +11,11 @@ export default new Vuex.Store({
     stations: [],
     genres: [],
     currentStation: {
-      current_song: ''
+      current_song: '',
+      logo_blob: '',
+    },
+    settings: {
+      locale: 'ru'
     },
     categories: [],
     serverTypes: ['icecast', 'shoutcast'],
@@ -55,11 +60,35 @@ export default new Vuex.Store({
     setFavorites(state, payload) {
       state.favorites = payload
     },
+    setSettings(state, payload) {
+      state.settings = payload
+    },
+    setVolume(state, payload) {
+      state.settings.volume = payload
+    },
+    setCurrentStationLogoBlob(state, payload) {
+      state.currentStation.logo_blob = payload
+    }
   },
   actions: {
+    scanStationLogo(context) {
+      ipcRenderer.invoke('read-station-logo', context.state.currentStation.id).then((response) => {
+        if (response) {
+          const blob = URL.createObjectURL(new Blob([response.buffer]))
+          context.commit('setCurrentStationLogoBlob', blob)
+        }
+      })
+    },
+    saveSettings(context) {
+      localStorage.setItem('settings', JSON.stringify(context.state.settings))
+    },
+    getSettings(context) {
+      context.commit('setSettings', JSON.parse(localStorage.getItem('settings')))
+    },
     refresh(context) {
       Promise.all([context.dispatch('getStations'), context.dispatch('getGenres')]).then((response) => {
         context.dispatch('getFavorites')
+        context.dispatch('getSettings')
         context.commit('fillStations', response[0].data.data)
         context.commit('fillGenres', response[1].data.data)
         context.commit('fillCategories')
@@ -117,7 +146,8 @@ export default new Vuex.Store({
     currentStation: state => state.currentStation,
     currentSong: state => state.currentSong,
     serverTypes: state => state.serverTypes,
-    isPlaying: state => state.isPlaying
+    isPlaying: state => state.isPlaying,
+    settings: state => state.settings
   },
   modules: {
   }

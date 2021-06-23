@@ -31,11 +31,9 @@ export default {
   name: 'Player',
   mounted() {
     this.player.element = document.getElementById('player')
-    if (localStorage.getItem('volume')) {
-      this.volume = parseFloat(localStorage.getItem('volume')*100)
-    } else {
-      this.player.element.volume = 50
-      this.volume = this.player.element.volume
+    if (!this.$store.getters.settings.volume) {
+      this.player.element.volume = 0.5
+      this.volume = this.player.element.volume * 100
     }
   },
   watch: {
@@ -45,6 +43,10 @@ export default {
     '$store.state.isPlaying'(value) {
       this.play(value)
     },
+    '$store.state.settings.volume'(volume) {
+      this.player.element.volume = volume
+      this.volume = this.player.element.volume * 100
+    }
   },
   data: () => ({
     player: {
@@ -74,7 +76,8 @@ export default {
     },
     changeVolume(value) {
       this.player.element.volume = value / 100
-      localStorage.setItem('volume', value / 100)
+      this.$store.commit('setVolume', value / 100)
+      this.$store.dispatch('saveSettings')
     },
     toggleMute() {
       if (this.volume === 0) {
@@ -84,7 +87,8 @@ export default {
         this.volume = 0
         this.player.element.volume = 0
       }
-      localStorage.setItem('volume', this.player.element.volume)
+      this.$store.commit('setVolume', this.player.element.volume)
+      this.$store.dispatch('saveSettings')
     }
   }
 }

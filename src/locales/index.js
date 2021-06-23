@@ -18,6 +18,8 @@ const messages = {
       deleteFavoritesText: 'Убрать из избранного',
       noFavoritesText: 'Избранных станций пока нет',
       catalog: 'Каталог станций',
+      and: 'и',
+      or: 'ИЛИ'
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -33,6 +35,7 @@ const messages = {
       serverType: 'Тип сервера',
       website: 'Сайт',
       logoSrc: 'Ссылка на логотип',
+      uploadLogoText: 'Выбрать файл логотипа',
       saveStationText: 'Станция сохранена',
       addStationText: 'Станция добавлена',
       deleteStationText: 'Станция удалена',
@@ -71,6 +74,8 @@ const messages = {
       deleteFavoritesText: 'Delete from favorites',
       noFavoritesText: 'No Favorites',
       catalog: 'Catalog',
+      and: 'and',
+      or: 'OR'
     },
     newRadio: {
       title: 'Add station',
@@ -86,6 +91,7 @@ const messages = {
       serverType: 'Server Type',
       website: 'Website',
       logoSrc: 'Station Logo url',
+      uploadLogoText: 'Choose station logo',
       saveStationText: 'Station saved',
       addStationText: 'Station added',
       deleteStationText: 'Station deleted',
