@@ -88,7 +88,7 @@ router.route('/api/genres')
     }).catch((error) => {
       jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
     })
-})
+  })
   .patch((req, res) => {
     db.updateGenre(req.body).then((response) => {
       jsonResponse(res, response)

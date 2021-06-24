@@ -41,6 +41,7 @@ export default {
         this.$store.commit('setPlaying', {state: false})
       } else {
         this.$store.commit('setPlaying', {state: true, station: this.$store.getters.currentStation})
+        this.$store.dispatch('scanStationLogo')
       }
     },
     changeVolume(value) {

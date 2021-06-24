@@ -160,13 +160,13 @@ export default {
     getBars() {
       return new Array(size)
           .fill(1)
-          .map(() => Math.ceil(Math.random() * (100 - 30) + 30));
+          .map(() => Math.ceil(Math.random() * (100 - 30) + 30))
     },
     updateBars() {
-      this.bars = this.getBars();
+      this.bars = this.getBars()
     },
     getDelay() {
-      return 60 * 1000 / tempo;
+      return 60 * 1000 / tempo
     },
     showEditStationDialog() {
       this.$emit('show-edit-station-dialog')
