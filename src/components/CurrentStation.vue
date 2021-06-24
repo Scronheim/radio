@@ -1,18 +1,33 @@
 <template>
   <v-card v-if="$store.getters.currentStation.id"
-          class="pt-5 mx-auto" flat>
-    <v-btn absolute right fab small color="primary" @click="showEditStationDialog">
-      <v-icon>
-        mdi-pencil
-      </v-icon>
-    </v-btn>
-    <v-btn absolute right fab small color="success"
-           style="margin-right: 50px"
-            @click="equalizerDialog = true">
-      <v-icon>
-        mdi-palette
-      </v-icon>
-    </v-btn>
+          class="mx-auto" flat>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn absolute right fab small color="primary"
+               v-on="on"
+               v-bind="attrs"
+               @click="showEditStationDialog">
+          <v-icon>
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+      </template>
+      <span>{{ $t('newRadio.titleEdit') }}</span>
+    </v-tooltip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn absolute right fab small color="success"
+               v-on="on"
+               v-bind="attrs"
+               style="margin-right: 50px"
+               @click="equalizerDialog = true">
+          <v-icon>
+            mdi-palette
+          </v-icon>
+        </v-btn>
+      </template>
+      <span>{{ $t('equalizerColors.title') }}</span>
+    </v-tooltip>
     <v-card-text>
       <v-img v-if="$store.getters.currentStation.logo_blob" :height="200" contain :src="$store.getters.currentStation.logo_blob"/>
       <v-img v-else-if="$store.getters.currentStation.logo_src" :height="200" contain :src="$store.getters.currentStation.logo_src"/>
@@ -109,8 +124,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="error" @click="equalizerDialog = false">{{ $t('radio.closeButton') }}</v-btn>
-          <v-btn color="success" @click="saveEqualizerColors">{{ $t('radio.saveButton') }}</v-btn>
+          <v-btn color="error" @click="equalizerDialog = false">{{ $t('texts.closeButton') }}</v-btn>
+          <v-btn color="success" @click="saveEqualizerColors">{{ $t('texts.saveButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -126,9 +141,6 @@ const tempo = 200 //bpm
 export default {
   name: "CurrentStation",
   components: {ClipLoader},
-  mounted() {
-    this.updateBars()
-  },
   watch: {
     '$store.getters.isPlaying'(value) {
       if (value) {

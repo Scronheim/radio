@@ -55,7 +55,7 @@
       <v-col>
         <v-text-field dense :label="$t('newRadio.logoSrc')" v-model="station.logo_src"/>
       </v-col>
-      {{ $t('radio.or') }}
+      {{ $t('texts.or') }}
       <v-col>
         <v-file-input dense :label="$t('newRadio.uploadLogoText')" v-model="logoFile"
                       @change="saveStationLogo"/>

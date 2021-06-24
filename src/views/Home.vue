@@ -17,7 +17,7 @@
                 </v-btn>
               </template>
               <v-list dense>
-                <v-list-item dense link @click="addStationDialog = true">
+                <v-list-item dense link @click="showAddStationDialog">
                   <v-list-item-title>{{ $t('newRadio.title') }}</v-list-item-title>
                 </v-list-item>
                 <v-list-item dense link @click="addGenreDialog = true">
@@ -27,15 +27,23 @@
             </v-menu>
           </v-col>
           <v-col align="end">
-            <v-btn icon class="mb-2" color="white" @click="settingsDialog = true">
-              <v-icon>mdi-cog</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon class="mb-2" color="white"
+                       v-on="on"
+                       v-bind="attrs"
+                       @click="settingsDialog = true">
+                  <v-icon>mdi-cog</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t('texts.settingsButton') }}</span>
+            </v-tooltip>
           </v-col>
         </v-row>
         <v-sheet class="pa-2 mb-2 primary">
           <v-text-field
               v-model="search"
-              :label="$t('radio.stationFilter')"
+              :label="$t('texts.stationFilter')"
               dark
               flat
               solo
@@ -52,7 +60,7 @@
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>
-                    <v-btn text>{{ $t('radio.favorites') }}</v-btn>
+                    <v-btn text>{{ $t('texts.favorites') }}</v-btn>
                   </v-list-item-title>
                 </v-list-item-content>
               </template>
@@ -70,7 +78,7 @@
                       </v-list-item-content>
                     </v-list-item>
                   </v-list>
-                  <p v-else class="text-center">{{ $t('radio.noFavoritesText') }}</p>
+                  <p v-else class="text-center">{{ $t('texts.noFavorites') }}</p>
                 </v-list-item-content>
               </v-list-item>
             </v-list-group>
@@ -81,7 +89,7 @@
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>
-                    <v-btn text>{{ $t('radio.catalog') }}</v-btn>
+                    <v-btn text>{{ $t('texts.catalog') }}</v-btn>
                   </v-list-item-title>
                 </v-list-item-content>
               </template>
@@ -122,25 +130,25 @@
                 <v-list-item-icon>
                   <v-icon color="success">mdi-plus</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>{{ $t('radio.addStation') }}</v-list-item-title>
+                <v-list-item-title>{{ $t('texts.addStation') }}</v-list-item-title>
               </v-list-item>
               <v-list-item dense link @click="toggleFavorites" v-if="editStation.id">
                 <v-list-item-icon>
                   <v-icon color="yellow">{{ stationInFavorites ? 'mdi-thumb-down': 'mdi-thumb-up' }}</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>{{ stationInFavorites ? $t('radio.deleteFavoritesText'): $t('radio.addFavoritesText') }}</v-list-item-title>
+                <v-list-item-title>{{ stationInFavorites ? $t('texts.deleteFavorites'): $t('texts.addFavorites') }}</v-list-item-title>
               </v-list-item>
               <v-list-item dense link @click="showEditDialog">
                 <v-list-item-icon>
                   <v-icon color="primary">mdi-pencil</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>{{ $t('radio.editText') }}</v-list-item-title>
+                <v-list-item-title>{{ $t('texts.edit') }}</v-list-item-title>
               </v-list-item>
               <v-list-item dense link @click="remove">
                 <v-list-item-icon>
                   <v-icon color="error">mdi-delete</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>{{ $t('radio.deleteText') }}</v-list-item-title>
+                <v-list-item-title>{{ $t('texts.delete') }}</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -159,8 +167,8 @@
         <station-form :station="editStation"/>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="error" @click="addStationDialog = false">{{ $t('radio.closeButton') }}</v-btn>
-          <v-btn color="success" @click="addNewStation">{{ $t('radio.addButton') }}</v-btn>
+          <v-btn color="error" @click="addStationDialog = false">{{ $t('texts.closeButton') }}</v-btn>
+          <v-btn color="success" @click="addNewStation">{{ $t('texts.addButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -171,8 +179,8 @@
         <station-form :station="editStation"/>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="error" @click="editStationDialog = false">{{ $t('radio.closeButton') }}</v-btn>
-          <v-btn color="success" @click="updateStation">{{ $t('radio.saveButton') }}</v-btn>
+          <v-btn color="error" @click="editStationDialog = false">{{ $t('texts.closeButton') }}</v-btn>
+          <v-btn color="success" @click="updateStation">{{ $t('texts.saveButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -183,8 +191,8 @@
         <genre-form :genre="genre"/>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="error" @click="addGenreDialog = false">{{ $t('radio.closeButton') }}</v-btn>
-          <v-btn color="success" @click="addNewGenre" :disabled="genre.name === ''">{{ $t('radio.addButton') }}</v-btn>
+          <v-btn color="error" @click="addGenreDialog = false">{{ $t('texts.closeButton') }}</v-btn>
+          <v-btn color="success" @click="addNewGenre" :disabled="genre.name === ''">{{ $t('texts.addButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -195,8 +203,8 @@
         <genre-form :genre="genre"/>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="error" @click="editGenreDialog = false">{{ $t('radio.closeButton') }}</v-btn>
-          <v-btn color="success" @click="updateGenre" :disabled="genre.name === ''">{{ $t('radio.saveButton') }}</v-btn>
+          <v-btn color="error" @click="editGenreDialog = false">{{ $t('texts.closeButton') }}</v-btn>
+          <v-btn color="success" @click="updateGenre" :disabled="genre.name === ''">{{ $t('texts.saveButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -207,8 +215,8 @@
         <settings-form/>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="error" @click="settingsDialog = false">{{ $t('radio.closeButton') }}</v-btn>
-          <v-btn color="success" @click="saveSettings">{{ $t('radio.saveButton') }}</v-btn>
+          <v-btn color="error" @click="settingsDialog = false">{{ $t('texts.closeButton') }}</v-btn>
+          <v-btn color="success" @click="saveSettings">{{ $t('texts.saveButton') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -304,14 +312,14 @@ export default {
       }
     },
     remove() {
-      if (confirm(`${this.$t('radio.deleteConfirmText')}`)) {
+      if (confirm(`${this.$t('texts.deleteConfirm')}`)) {
         if (this.genre.id) {
           this.$store.dispatch('deleteGenre', this.genre).then(() => {
             this.$store.dispatch('refresh')
             this.$toast.success(this.$t('newRadio.deleteGenreText'))
           }).catch((error) => {
             if (error.response.data.error.code === 1451) {
-              this.$toast.error(this.$t('radio.foreignKeyErrorText'))
+              this.$toast.error(this.$t('texts.foreignKeyError'))
             } else {
               this.$toast.error(error.response.data.error.message)
             }
@@ -456,7 +464,7 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
-  max-height: 68vh;
+  max-height: 70vh;
   min-height: 66vh;
 }
 
