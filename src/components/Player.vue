@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="1" align-self="center">
-      <v-btn icon @click="play(!$store.getters.isPlaying)">
+      <v-btn icon @click="togglePlay">
         <v-icon v-if="$store.getters.isPlaying">mdi-pause</v-icon>
         <v-icon v-else>mdi-play</v-icon>
       </v-btn>
@@ -16,10 +16,10 @@
     </v-col>
     <v-col cols="2">
       <v-slider height="40"
-                v-model="volume"
+                :value="$store.getters.settings.volume"
                 thumb-color="success"
                 thumb-label
-                :prepend-icon="volume === 0 ? 'mdi-volume-off': 'mdi-volume-high'"
+                :prepend-icon="$store.getters.settings.volume === 0 ? 'mdi-volume-off': 'mdi-volume-high'"
                 @click:prepend="toggleMute"
                 @change="changeVolume"/>
     </v-col>
@@ -30,53 +30,34 @@
 export default {
   name: 'Player',
   mounted() {
-    this.player.element = document.getElementById('player')
+    this.$store.commit('setPlayer', document.getElementById('player'))
     if (!this.$store.getters.settings.volume) {
-      this.player.element.volume = 0.5
-      this.volume = this.player.element.volume * 100
-    }
-  },
-  watch: {
-    '$store.state.settings.volume'(volume) {
-      this.player.element.volume = volume
-      this.volume = this.player.element.volume * 100
+      this.$store.commit('setPlayerVolume', 0.5)
     }
   },
   data: () => ({
-    player: {
-      element: HTMLElement,
-    },
-    volume: 10,
-    timer: null,
+
   }),
   methods: {
-    play(isPlaying) {
-      if (isPlaying) {
-        this.$store.commit('setPlaying', {state: true, station: this.$store.getters.currentStation})
-        this.$store.commit('setCurrentSong', '')
-        this.$store.dispatch('scanStationLogo')
-        this.player.element.load()
-        this.player.element.play()
-      } else {
-        this.player.element.pause()
+    togglePlay() {
+      if (this.$store.getters.isPlaying) {
         this.$store.commit('setPlaying', {state: false})
-        this.$store.commit('setCurrentSong', 'Paused')
+      } else {
+        this.$store.commit('setPlaying', {state: true, station: this.$store.getters.currentStation})
       }
     },
     changeVolume(value) {
-      this.player.element.volume = value / 100
-      this.$store.commit('setVolume', value / 100)
+      this.$store.commit('setPlayerVolume', value / 100)
+      this.$store.commit('setVolume', value)
       this.$store.dispatch('saveSettings')
     },
     toggleMute() {
-      if (this.volume === 0) {
-        this.volume = 100
-        this.player.element.volume = 1
+      if (this.$store.getters.settings.volume === 0) {
+        this.$store.commit('setPlayerVolume', 1)
       } else {
-        this.volume = 0
-        this.player.element.volume = 0
+        this.$store.commit('setPlayerVolume', 0)
       }
-      this.$store.commit('setVolume', this.player.element.volume)
+      this.$store.commit('setVolume', this.$store.getters.player.element.volume * 100)
       this.$store.dispatch('saveSettings')
     }
   }

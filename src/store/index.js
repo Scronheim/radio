@@ -7,6 +7,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    player: {
+      element: HTMLElement,
+    },
     favorites: [],
     stations: [],
     genres: [],
@@ -15,7 +18,9 @@ export default new Vuex.Store({
       logo_blob: '',
     },
     settings: {
-      locale: 'ru'
+      locale: 'ru',
+      volume: null,
+      theme: null
     },
     categories: [],
     serverTypes: ['icecast', 'shoutcast', '101.ru'],
@@ -29,10 +34,10 @@ export default new Vuex.Store({
   mutations: {
     setPlaying(state, payload) {
       state.isPlaying = payload.state
+      clearInterval(state.currentSongTimer)
       if (payload.station) {
         state.currentStation = payload.station
-      }
-      if (payload.state) {
+        state.currentSong = ''
         state.currentSongTimer = setInterval(() => {
           const payload = {
             event: 'getCurrentTrack',
@@ -40,9 +45,25 @@ export default new Vuex.Store({
           }
           state.webSocket.send(JSON.stringify(payload))
         }, 5000)
+        state.webSocket.onmessage = function (event) {
+          if (event.data === '') {
+            state.currentSong = null
+          } else {
+            state.currentSong = event.data
+          }
+        }
+        state.player.element.load()
+        state.player.element.play()
       } else {
-        clearInterval(state.currentSongTimer)
+        state.currentSong = 'Paused'
+        state.player.element.pause()
       }
+    },
+    setPlayer(state, payload) {
+      state.player.element = payload
+    },
+    setPlayerVolume(state, payload) {
+      state.player.element.volume = payload
     },
     fillStations(state, payload) {
       state.stations = payload
@@ -106,7 +127,7 @@ export default new Vuex.Store({
       context.commit('setSettings', JSON.parse(localStorage.getItem('settings')))
     },
     refresh(context) {
-      Promise.all([context.dispatch('getStations'), context.dispatch('getGenres')]).then((response) => {
+      return Promise.all([context.dispatch('getStations'), context.dispatch('getGenres')]).then((response) => {
         context.dispatch('getFavorites')
         context.dispatch('getSettings')
         context.commit('fillStations', response[0].data.data)
@@ -154,6 +175,7 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    player: state => state.player,
     favorites: state => state.favorites,
     stations: state => state.stations,
     genres: state => state.genres,

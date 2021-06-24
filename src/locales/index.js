@@ -54,6 +54,8 @@ const messages = {
       title: 'Настройки',
       locale: 'Язык',
       locales: ['Русский', 'Английский'],
+      themeText: 'Тема',
+      themes: ['Тёмная', 'Светлая'],
       saveSettingsText: 'Настройки сохранены'
     },
   },
@@ -112,6 +114,8 @@ const messages = {
       title: 'Settings',
       locale: 'Language',
       locales: ['Russian', 'English'],
+      themeText: 'Theme',
+      themes: ['Dark', 'Light'],
       saveSettingsText: 'Settings saved'
     },
   }

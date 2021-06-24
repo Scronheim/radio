@@ -32,8 +32,12 @@ wss.on('connection', function connection(ws) {
         })
       } else if (station.server_type === 'icecast') {
         await checkCurrentSong(station.song_src).then((response) => {
-          const dom = parser.parseFromString(response.data);
-          ws.send(dom.getElementsByClassName('streamdata')[station.icecast_song_field_number].innerHTML)
+          const dom = parser.parseFromString(response.data)
+          if (dom.getElementsByClassName('streamdata').length) {
+            ws.send(dom.getElementsByClassName('streamdata')[station.icecast_song_field_number].innerHTML)
+          } else {
+            ws.send(dom.getElementsByClassName('streamstats')[station.icecast_song_field_number].innerHTML)
+          }
         })
       }
     }

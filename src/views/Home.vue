@@ -63,7 +63,7 @@
                     <v-list-item dense v-for="(fav, index) in $store.getters.favorites" :key="fav.id">
                       <v-list-item-content>
                         <v-list-item-title>
-                          <v-btn text @contextmenu="showMenu($event, fav, index)" @click="playStation([fav.id])">
+                          <v-btn text @contextmenu="showMenu($event, fav, index)" @click="playStation([fav])">
                             {{ fav.name }}
                           </v-btn>
                         </v-list-item-title>
@@ -93,6 +93,7 @@
                       dense
                       open-on-click
                       transition
+                      return-object
                       :active.sync="active"
                       :items="$store.getters.categories"
                       :filter="filter"
@@ -379,15 +380,12 @@ export default {
       this.y = e.clientY
       this.menu = true
     },
-    playStation(stationId) {
-      if (stationId[0]) {
-        const station = this.$store.getters.stations.find(st => st.id === stationId[0])
-        this.$store.commit('setPlaying', {state: true, station: station})
-        this.$store.commit('setCurrentSong', '')
+    playStation(station) {
+      if (station[0]) {
+        this.$store.commit('setPlaying', {state: true, station: station[0]})
         this.$store.dispatch('scanStationLogo')
       } else {
         this.$store.commit('setPlaying', {state: false})
-        this.$store.commit('setCurrentSong', 'Paused')
       }
     },
     addNewStation() {
@@ -438,6 +436,7 @@ export default {
     saveSettings() {
       this.$store.dispatch('saveSettings')
       this.settingsDialog = false
+      this.$vuetify.theme.dark = this.$store.getters.settings.theme === 'Dark';
       this.$i18n.locale = this.$store.getters.settings.locale
       this.$toast.success(this.$t('settings.saveSettingsText'))
     },
