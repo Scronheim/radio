@@ -31,9 +31,6 @@ export default {
   name: 'Player',
   mounted() {
     this.$store.commit('setPlayer', document.getElementById('player'))
-    if (!this.$store.getters.settings.volume) {
-      this.$store.commit('setPlayerVolume', 0.5)
-    }
   },
   data: () => ({
 

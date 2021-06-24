@@ -7,7 +7,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-select dense :label="$t('settings.themeText')" :items="$t('settings.themes')" v-model="$store.getters.settings.theme"/>
+        <v-select dense :label="$t('settings.themeText')" :items="['dark', 'light']" v-model="$store.getters.settings.theme"/>
       </v-col>
     </v-row>
   </v-card-text>

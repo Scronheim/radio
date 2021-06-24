@@ -16,7 +16,7 @@ export default {
   components: {Player},
   mounted() {
     this.$store.dispatch('refresh').then(() => {
-      this.$vuetify.theme.dark = this.$store.getters.settings.theme === 'Dark';
+      this.$vuetify.theme.dark = this.$store.getters.settings.theme === 'dark';
     })
     this.$store.commit('setWebSocket')
   },

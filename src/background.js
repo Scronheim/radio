@@ -17,7 +17,7 @@ async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     width: 1400,
-    height: 1000,
+    height: 880,
     title: `Radio v${version}`,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone

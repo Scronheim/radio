@@ -436,7 +436,7 @@ export default {
     saveSettings() {
       this.$store.dispatch('saveSettings')
       this.settingsDialog = false
-      this.$vuetify.theme.dark = this.$store.getters.settings.theme === 'Dark';
+      this.$vuetify.theme.dark = this.$store.getters.settings.theme === 'dark'
       this.$i18n.locale = this.$store.getters.settings.locale
       this.$toast.success(this.$t('settings.saveSettingsText'))
     },

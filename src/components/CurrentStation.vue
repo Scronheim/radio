@@ -6,6 +6,13 @@
         mdi-pencil
       </v-icon>
     </v-btn>
+    <v-btn absolute right fab small color="success"
+           style="margin-right: 50px"
+            @click="equalizerDialog = true">
+      <v-icon>
+        mdi-palette
+      </v-icon>
+    </v-btn>
     <v-card-text>
       <v-img v-if="$store.getters.currentStation.logo_blob" :height="200" contain :src="$store.getters.currentStation.logo_blob"/>
       <v-img v-else-if="$store.getters.currentStation.logo_src" :height="200" contain :src="$store.getters.currentStation.logo_src"/>
@@ -16,9 +23,9 @@
         <svg id="equalizer">
           <defs>
             <linearGradient id="barBg" gradientTransform="rotate(90)">
-              <stop offset="0%" stop-color="#a142f5"/>
-              <stop offset="50%" stop-color="#12fdfd"/>
-              <stop offset="100%" stop-color="#fff"/>
+              <stop offset="0%" :stop-color="$store.getters.settings.equalizerColors['0']"/>
+              <stop offset="50%" :stop-color="$store.getters.settings.equalizerColors['50']"/>
+              <stop offset="100%" :stop-color="$store.getters.settings.equalizerColors['100']"/>
             </linearGradient>
           </defs>
           <rect
@@ -66,6 +73,47 @@
         <a :href="`${$store.getters.currentStation.website}`" target="_blank">{{ $store.getters.currentStation.website }}</a>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="equalizerDialog" width="100%">
+      <v-card>
+        <v-card-title>{{ $t('equalizerColors.title') }}</v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col cols="2">
+              <v-checkbox dense :label="$t('equalizerColors.showSwatchesText')" v-model="showSwatches"/>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <h4 class="text--white">{{ $t('equalizerColors.color0') }}</h4>
+              <v-color-picker mode="hexa" hide-mode-switch v-model="$store.getters.settings.equalizerColors['0']"
+                              :show-swatches="showSwatches"
+                              swatches-max-height="250"
+                              @update:color="changeEqualizerColor0"/>
+            </v-col>
+            <v-col>
+              <h4 class="text--white">{{ $t('equalizerColors.color50') }}</h4>
+              <v-color-picker mode="hexa" hide-mode-switch v-model="$store.getters.settings.equalizerColors['50']"
+                              :show-swatches="showSwatches"
+                              swatches-max-height="250"
+                              @update:color="changeEqualizerColor50"/>
+            </v-col>
+            <v-col>
+              <h4 class="text--white">{{ $t('equalizerColors.color100') }}</h4>
+              <v-color-picker mode="hexa" hide-mode-switch v-model="$store.getters.settings.equalizerColors['100']"
+                              :show-swatches="showSwatches"
+                              swatches-max-height="250"
+                              @update:color="changeEqualizerColor100"/>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn color="error" @click="equalizerDialog = false">{{ $t('radio.closeButton') }}</v-btn>
+          <v-btn color="success" @click="saveEqualizerColors">{{ $t('radio.saveButton') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -91,6 +139,8 @@ export default {
     },
   },
   data: () => ({
+    equalizerDialog: false,
+    showSwatches: false,
     bars: [],
     timer: null,
   }),
@@ -108,6 +158,19 @@ export default {
     },
     showEditStationDialog() {
       this.$emit('show-edit-station-dialog')
+    },
+    changeEqualizerColor0(color) {
+      this.$store.commit('setEqualizerColor', {percent: 0, color: color.hex})
+    },
+    changeEqualizerColor50(color) {
+      this.$store.commit('setEqualizerColor', {percent: 50, color: color.hex})
+    },
+    changeEqualizerColor100(color) {
+      this.$store.commit('setEqualizerColor', {percent: 100, color: color.hex})
+    },
+    saveEqualizerColors() {
+      this.$store.dispatch('saveSettings')
+      this.equalizerDialog = false
     }
   }
 }

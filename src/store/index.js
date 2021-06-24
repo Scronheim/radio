@@ -20,7 +20,12 @@ export default new Vuex.Store({
     settings: {
       locale: 'ru',
       volume: null,
-      theme: null
+      theme: null,
+      equalizerColors: {
+        0: '#a142f5',
+        50: '#12fdfd',
+        100: '#fff'
+      }
     },
     categories: [],
     serverTypes: ['icecast', 'shoutcast', '101.ru'],
@@ -96,7 +101,7 @@ export default new Vuex.Store({
       state.favorites = payload
     },
     setSettings(state, payload) {
-      state.settings = payload
+      Object.assign(state.settings, payload)
     },
     setVolume(state, payload) {
       state.settings.volume = payload
@@ -109,7 +114,10 @@ export default new Vuex.Store({
     },
     setCurrentSongTimer(state, payload) {
       state.currentSongTimer = payload
-    }
+    },
+    setEqualizerColor(state, payload) {
+      state.settings.equalizerColors[payload.percent] = payload.color
+    },
   },
   actions: {
     scanStationLogo(context) {
@@ -124,7 +132,9 @@ export default new Vuex.Store({
       localStorage.setItem('settings', JSON.stringify(context.state.settings))
     },
     getSettings(context) {
-      context.commit('setSettings', JSON.parse(localStorage.getItem('settings')))
+      const settings = JSON.parse(localStorage.getItem('settings'))
+      context.commit('setPlayerVolume', settings.volume / 100)
+      context.commit('setSettings', settings)
     },
     refresh(context) {
       return Promise.all([context.dispatch('getStations'), context.dispatch('getGenres')]).then((response) => {

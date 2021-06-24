@@ -50,6 +50,13 @@ const messages = {
       addGenreText: 'Жанр добавлен',
       deleteGenreText: 'Жанр удалён'
     },
+    equalizerColors: {
+      title: 'Настройки цветов эквалайзера',
+      showSwatchesText: 'Показать образцы',
+      color0: 'Цвет верха',
+      color50: 'Цвет середины',
+      color100: 'Цвет низа'
+    },
     settings: {
       title: 'Настройки',
       locale: 'Язык',
@@ -109,6 +116,13 @@ const messages = {
       saveGenreText: 'Genre saved',
       addGenreText: 'Genre added',
       deleteGenreText: 'Genre deleted'
+    },
+    equalizerColors: {
+      title: 'Equalizer colors settings',
+      showSwatchesText: 'Show swatches',
+      color0: 'Color for top',
+      color50: 'Color for middle',
+      color100: 'Color for bottom'
     },
     settings: {
       title: 'Settings',
