@@ -54,16 +54,22 @@ router.route('/api/stations')
   .get((req, res) => {
     db.selectStations().then((response) => {
       jsonResponse(res, response)
+    }).catch((error) => {
+      jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
     })
   })
   .post((req, res) => {
     db.insertStation(req.body).then((response) => {
       jsonResponse(res, response)
+    }).catch((error) => {
+      jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
     })
   })
   .patch((req, res) => {
     db.updateStation(req.body).then((response) => {
       jsonResponse(res, response)
+    }).catch((error) => {
+      jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
     })
   })
 
@@ -72,20 +78,22 @@ router.route('/api/genres')
   .get((req, res) => {
     db.selectGenres().then((response) => {
       jsonResponse(res, response)
-    });
+    }).catch((error) => {
+      jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
+    })
   })
   .post((req, res) => {
     db.insertGenre(req.body).then((response) => {
       jsonResponse(res, response)
     }).catch((error) => {
-      jsonResponse(res, null, error.sqlMessage, false)
+      jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
     })
 })
   .patch((req, res) => {
     db.updateGenre(req.body).then((response) => {
       jsonResponse(res, response)
     }).catch((error) => {
-      jsonResponse(res, null, error.sqlMessage, false)
+      jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
     })
   })
 
