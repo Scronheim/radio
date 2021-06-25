@@ -18,7 +18,7 @@ async function createWindow() {
   win = new BrowserWindow({
     width: 1400,
     height: 880,
-    title: `Radio ${app.getVersion()}`,
+    title: `Radio v${app.getVersion()}`,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
