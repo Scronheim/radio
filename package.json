@@ -18,12 +18,12 @@
     "type": "git",
     "url": "https://github.com/Scronheim/radio"
   },
-  "main": "background.js",
+  "main": "dist_electron/bundled/background.js",
   "build": {
     "productName": "Radio",
     "appId": "ru.sconheim.radio",
     "directories": {
-      "output": "build"
+      "output": "dist_electron"
     },
     "files": [
       "dist_electron/**/*"
@@ -38,7 +38,7 @@
     "linux": {
       "publish": ["github"],
       "category": "media",
-      "icon": "build/icon64.png",
+      "icon": "dist_electron/icon64.png",
       "target": [
         "AppImage"
       ]
