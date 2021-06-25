@@ -22,21 +22,29 @@ export default {
     })
     this.$store.commit('setWebSocket')
   },
+  data: () => ({
+    progress: {
+      bytesPerSecond: '',
+      percent: '',
+      transferred: '',
+      total: ''
+    }
+  }),
   methods: {
     checkUpdates() {
       ipcRenderer.on('update_available', () => {
         ipcRenderer.removeAllListeners('update_available')
         this.$toast.info(this.$t('texts.updateAvailable'))
+        this.$toast.info(this.$t('texts.download', {
+          downloadSpeed: this.progress.bytesPerSecond,
+          downloaded: this.progress.percent,
+          transferred: this.progress.transferred,
+          total: this.progress.total
+        }), {timeout: 0})
       })
 
       ipcRenderer.on('download-progress', (progress) => {
-        // ipcRenderer.removeAllListeners('download-progress')
-        this.$toast.info(this.$t('texts.download', {
-          downloadSpeed: progress.bytesPerSecond,
-          downloaded: progress.percent,
-          transferred: progress.transferred,
-          total: progress.total
-        }), {timeout: 0})
+        Object.assign(this.progress, progress)
       })
 
       // ipcRenderer.on('update_downloaded', () => {
