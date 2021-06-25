@@ -2,7 +2,6 @@ module.exports = {
   productionSourceMap: false,
   pluginOptions: {
     electronBuilder: {
-      autoInstallOnAppQuit: false,
       builderOptions: {
         win: {
           icon: 'public/icon512.png'

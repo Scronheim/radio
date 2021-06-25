@@ -3,7 +3,6 @@ import { app, protocol, ipcMain, BrowserWindow, Menu } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-const version = require('../package.json').version
 const fs = require('fs')
 const path = require('path')
 const { autoUpdater } = require('electron-updater')
@@ -19,7 +18,7 @@ async function createWindow() {
   win = new BrowserWindow({
     width: 1400,
     height: 880,
-    title: `Radio v${version}`,
+    title: `Radio ${app.getVersion()}`,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info

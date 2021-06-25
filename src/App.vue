@@ -30,7 +30,7 @@ export default {
       })
 
       ipcRenderer.on('download-progress', (progress) => {
-        ipcRenderer.removeAllListeners('download-progress')
+        // ipcRenderer.removeAllListeners('download-progress')
         this.$toast.info(this.$t('texts.download', {
           downloadSpeed: progress.bytesPerSecond,
           downloaded: progress.percent,
