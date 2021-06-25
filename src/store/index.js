@@ -132,9 +132,16 @@ export default new Vuex.Store({
       localStorage.setItem('settings', JSON.stringify(context.state.settings))
     },
     getSettings(context) {
-      const settings = JSON.parse(localStorage.getItem('settings'))
+      let settings = JSON.parse(localStorage.getItem('settings'))
+      if (!settings) {
+        settings = {}
+        settings.volume = 50
+        settings.locale = 'ru'
+        settings.theme = 'dark'
+      }
       context.commit('setPlayerVolume', settings.volume / 100)
       context.commit('setSettings', settings)
+      context.dispatch('saveSettings')
     },
     refresh(context) {
       return Promise.all([context.dispatch('getStations'), context.dispatch('getGenres')]).then((response) => {
