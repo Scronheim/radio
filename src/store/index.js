@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 
 Vue.use(Vuex)
 
@@ -35,6 +35,8 @@ export default new Vuex.Store({
     currentSong: '',
     webSocket: null,
     currentSongTimer: null,
+    appName: remote.app.getName(),
+    version: remote.app.getVersion()
   },
   mutations: {
     setPlaying(state, payload) {
@@ -202,6 +204,8 @@ export default new Vuex.Store({
     serverTypes: state => state.serverTypes,
     isPlaying: state => state.isPlaying,
     settings: state => state.settings,
-    webSocket: state => state.webSocket
+    webSocket: state => state.webSocket,
+    appName: state => state.appName,
+    version: state => state.version
   },
 })

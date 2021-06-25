@@ -1,5 +1,14 @@
 <template>
   <v-app>
+    <v-titlebar :theme="titleBar.theme" :platform="titleBar.platform">
+      <template slot="icon">
+        <v-img width="30" height="25" contain src="/icon512.png" alt="icon" />
+      </template>
+
+      <template slot="title">
+        {{ $store.getters.appName }} v{{ $store.getters.version }}
+      </template>
+    </v-titlebar>
     <v-main>
       <router-view/>
       <v-dialog v-model="downloadDialog" width="70%" persistent>
@@ -60,6 +69,11 @@ export default {
   data: () => ({
     downloadDialog: false,
     showRestartButton: false,
+    titleBar: {
+      theme: 'dark',
+      platform: process.platform,
+      isMaximizable: false,
+    },
     progress: {
       bytesPerSecond: '',
       percent: 0,

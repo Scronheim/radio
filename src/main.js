@@ -8,21 +8,12 @@ import _ from 'lodash'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 import messages from './locales/index'
-import { Titlebar, Color } from 'custom-electron-titlebar'
-import { remote } from 'electron'
-
-const title = new Titlebar({
-  backgroundColor: Color.fromHex('#036'),
-  overflow: 'auto',
-  maximizable: false,
-  icon: '../public/icon512.png',
-})
-
-title.updateTitle(`${remote.app.getName()} v${remote.app.getVersion()}`)
+import VueTitlebar from '@wuild/vue-titlebar'
 
 Vue.config.productionTip = false
 Vue.prototype.$_ = _
 
+Vue.use(VueTitlebar)
 Vue.use(VueI18n)
 // Create VueI18n instance with options
 const settings = JSON.parse(localStorage.getItem('settings'))
