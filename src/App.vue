@@ -29,6 +29,16 @@ export default {
         this.$toast.info(this.$t('texts.updateAvailable'))
       })
 
+      ipcRenderer.on('download-progress', (progress) => {
+        ipcRenderer.removeAllListeners('download-progress')
+        this.$toast.info(this.$t('texts.updateAvailable', {
+          downloadSpeed: progress.bytesPerSecond,
+          downloaded: progress.percent,
+          transferred: progress.transferred,
+          total: progress.total
+        }), {timeout: 0})
+      })
+
       ipcRenderer.on('update_downloaded', () => {
         ipcRenderer.removeAllListeners('update_downloaded')
         this.$toast.info(this.$t('texts.updateDownloaded'))

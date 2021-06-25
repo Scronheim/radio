@@ -10,7 +10,7 @@
   "description": "Application for listening radio",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service electron:build --linux appimage --windows nsis",
+    "build": "vue-cli-service electron:build --windows nsis",
     "lint": "vue-cli-service lint",
     "electron:build windows": "vue-cli-service electron:build --windows",
     "electron:build linux": "vue-cli-service electron:build --linux",

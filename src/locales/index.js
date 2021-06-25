@@ -22,7 +22,10 @@ const messages = {
       or: 'ИЛИ',
       updateAvailable: 'Доступна новая версия программы. Скачиваю...',
       updateDownloaded: 'Новая версия успешно скачана. Перезапускаюсь...',
-      restartApp: 'Перезапустить'
+      restartApp: 'Перезапустить',
+      download: `Скорость загрузки: {downloadSpeed}<br>
+                      Скачано: {downloaded}<br>
+                      ({transferred}/{total})`,
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -36,7 +39,7 @@ const messages = {
       country: 'Страна',
       bitrate: 'Битрейт (kbps)',
       serverType: 'Тип сервера',
-      '101_channel_id': 'Номер станции',
+      '101_channel_id': 'ID станции',
       icecast_song_field_number: 'Порядковый номер поля с текущим треком',
       website: 'Сайт',
       logoSrc: 'Ссылка на логотип',
@@ -92,7 +95,10 @@ const messages = {
       or: 'OR',
       updateAvailable: 'A new update is available. Downloading now...',
       updateDownloaded: 'Update downloaded. Restarting...',
-      restartApp: 'Restart app'
+      restartApp: 'Restart app',
+      download: `Download speed: {downloadSpeed}<br>
+                      Downloaded: {downloaded}<br>
+                      ({transferred}/{total})`,
     },
     newRadio: {
       title: 'Add station',
