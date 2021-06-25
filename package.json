@@ -31,7 +31,7 @@
       "output": "build"
     },
     "files": [
-      "dist_electron/**/*"
+      "dist_electron/bundled/*"
     ],
     "publish": [
       {
