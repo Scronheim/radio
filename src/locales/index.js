@@ -22,8 +22,11 @@ const messages = {
       or: 'ИЛИ',
       checkUpdates: 'Проверить обновления',
       updateAvailable: 'Доступна новая версия программы. Скачиваю...',
+      updateNotAvailable: 'Обновления не найдены. Вы используете последнюю версию',
       updateDownloaded: 'Новая версия успешно скачана. Перезапускаюсь...',
       restartApp: 'Перезапустить',
+      downloadSpeed: 'Скорость загрузки',
+      updating: 'Обновление'
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -93,8 +96,11 @@ const messages = {
       or: 'OR',
       checkUpdates: 'Check updates',
       updateAvailable: 'A new update is available. Downloading now...',
+      updateNotAvailable: 'Updates not found. You use latest version',
       updateDownloaded: 'Update downloaded. Restarting...',
       restartApp: 'Restart app',
+      downloadSpeed: 'Download speed',
+      updating: 'Updating'
     },
     newRadio: {
       title: 'Add station',

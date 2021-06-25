@@ -4,7 +4,7 @@
       <router-view/>
       <v-dialog v-model="downloadDialog" width="70%" persistent>
         <v-card>
-          <v-card-title>Updating</v-card-title>
+          <v-card-title>{{ $t('texts.updating') }}</v-card-title>
           <v-card-text>
             <v-row>
               <v-col>
@@ -13,7 +13,7 @@
                     <strong>{{ transferredInMb }}/{{ totalInMb }} MB ({{ Math.ceil(value) }}%)</strong>
                   </template>
                 </v-progress-linear>
-                <p>Download speed: {{ downloadSpeedInMb }} mb/s</p>
+                <p>{{ $t('texts.downloadSpeed') }}: {{ downloadSpeedInMb }} mb/s</p>
               </v-col>
             </v-row>
           </v-card-text>
@@ -66,6 +66,10 @@ export default {
   }),
   methods: {
     checkUpdates() {
+      ipcRenderer.on('update_not_available', () => {
+        this.$toast.info(this.$t('texts.updateNotAvailable'))
+      })
+
       ipcRenderer.on('update_available', () => {
         // ipcRenderer.removeAllListeners('update_available')
         this.$toast.info(this.$t('texts.updateAvailable'))
