@@ -87,7 +87,7 @@ if (process.env.DESKTOPINTEGRATION === 'AppImageLauncher') {
   autoUpdater.logger.info('Not running in AppImageLauncher')
 }
 
-autoUpdater.on('download-progress', (progressObj) => {
+autoUpdater.on('download-progress', (ev, progressObj) => {
   win.webContents.send('download-progress', progressObj)
 })
 
