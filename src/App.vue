@@ -32,14 +32,17 @@
 
 <script>
 import { ipcRenderer } from 'electron'
-import Player from "@/components/Player"
+import Player from '@/components/Player'
 export default {
   name: 'App',
   components: {Player},
   mounted() {
+    this.$vuetify.theme.dark = true
     this.checkUpdates()
     this.$store.dispatch('refresh').then(() => {
-      this.$vuetify.theme.dark = this.$store.getters.settings.theme === 'dark';
+      if (this.$store.getters.settings.theme !== 'dark') {
+        this.$vuetify.theme.dark = false
+      }
     })
     this.$store.commit('setWebSocket')
   },
@@ -91,5 +94,7 @@ export default {
 </script>
 
 <style>
-
+::-webkit-scrollbar {
+  display: none;
+}
 </style>

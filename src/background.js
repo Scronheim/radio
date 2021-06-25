@@ -24,8 +24,11 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
-      webSecurity: false
-    }
+      webSecurity: false,
+      enableRemoteModule: true
+    },
+    frame: false,
+    titleBarStyle: 'hidden',
   })
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -46,6 +49,7 @@ async function createWindow() {
   // })
 
 }
+
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
