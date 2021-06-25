@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <v-titlebar :theme="titleBar.theme" :platform="titleBar.platform">
+    <v-titlebar :theme="titleBar.theme" :platform="titleBar.platform" :on-close="close" :on-maximize="toggleMaximize"
+                :on-minimize="minimize">
       <template slot="icon">
         <v-img width="30" height="25" contain src="/icon512.png" alt="icon" />
       </template>
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 import Player from '@/components/Player'
 export default {
   name: 'App',
@@ -72,7 +73,9 @@ export default {
     titleBar: {
       theme: 'dark',
       platform: process.platform,
-      isMaximizable: false,
+      isMaximizable: remote.getCurrentWindow().isMaximizable(),
+      isMinimizable: remote.getCurrentWindow().isMinimizable(),
+      isClosable: remote.getCurrentWindow().isClosable(),
     },
     progress: {
       bytesPerSecond: '',
@@ -102,6 +105,19 @@ export default {
     },
     restartApp() {
       ipcRenderer.send('restart_app')
+    },
+    close() {
+      remote.getCurrentWindow().close()
+    },
+    toggleMaximize() {
+      let win = remote.getCurrentWindow()
+      if (win.isMaximized())
+        win.unmaximize()
+      else
+        win.maximize()
+    },
+    minimize() {
+      remote.getCurrentWindow().minimize()
     }
   }
 };
