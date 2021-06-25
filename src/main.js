@@ -46,7 +46,7 @@ Vue.use(Toast, {
   transition: "Vue-Toastification__bounce",
   maxToasts: 3,
   newestOnTop: true,
-  position: "top-right",
+  position: "bottom-right",
   timeout: 5000,
   closeOnClick: true,
   pauseOnFocusLoss: true,

@@ -32,8 +32,9 @@
                 <v-btn icon class="mb-2" color="info"
                        v-on="on"
                        v-bind="attrs"
+                       :disabled="loading"
                        @click="checkUpdates">
-                  <v-icon>mdi-refresh</v-icon>
+                  <v-icon>{{ rotateRefreshButton }}</v-icon>
                 </v-btn>
               </template>
               <span>{{ $t('texts.checkUpdates') }}</span>
@@ -245,7 +246,22 @@ import SettingsForm from "@/components/SettingsForm"
 export default {
   name: 'Home',
   components: {StationForm, GenreForm, CurrentStation, SettingsForm},
+  mounted() {
+    ipcRenderer.on('update_not_available', () => {
+      this.loading = false
+    })
+
+    ipcRenderer.on('update_downloaded', () => {
+      this.loading = false
+    })
+  },
   computed: {
+    rotateRefreshButton() {
+      if (this.loading) {
+        return 'mdi-refresh mdi-spin'
+      }
+      return 'mdi-refresh'
+    },
     stationInFavorites() {
       return this.$store.getters.favorites.find((st) => {
         return st.id === this.editStation.id
@@ -270,6 +286,7 @@ export default {
     }
   },
   data: () => ({
+    loading: false,
     activeList: false,
     addStationDialog: false,
     editStationDialog: false,
@@ -302,6 +319,7 @@ export default {
   }),
   methods: {
     checkUpdates() {
+      this.loading = true
       ipcRenderer.invoke('check-updates')
     },
     deleteFav(index) {
