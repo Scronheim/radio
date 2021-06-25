@@ -3,6 +3,11 @@
   "version": "0.1.6",
   "private": true,
   "license": "MIT",
+  "author": {
+    "name": "Scronheim",
+    "email": "scronheime@gmail.com"
+  },
+  "description": "Application for listening radio",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -12,7 +17,7 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "deploy": "electron-builder build --linux --publish always"
+    "deploy": "electron-builder build --win --linux --publish always"
   },
   "repository": {
     "type": "git",
@@ -23,7 +28,7 @@
     "productName": "Radio",
     "appId": "ru.sconheim.radio",
     "directories": {
-      "output": "dist_electron"
+      "output": "build"
     },
     "files": [
       "dist_electron/**/*"
@@ -36,17 +41,15 @@
       }
     ],
     "linux": {
-      "publish": [
-        "github"
-      ],
+      "publish": ["github"],
       "category": "media",
       "icon": "dist_electron/icon64.png",
-      "target": [
-        "AppImage"
-      ]
+      "target": ["AppImage"]
     },
     "win": {
-      "target": "nsis"
+      "publish": ["github"],
+      "icon": "dist_electron/icon64.png",
+      "target": ["nsis"]
     }
   },
   "dependencies": {

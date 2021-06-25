@@ -13,9 +13,10 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 Menu.setApplicationMenu(null)
+let win
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1400,
     height: 880,
     title: `Radio v${version}`,
@@ -43,12 +44,6 @@ async function createWindow() {
 
   win.once('ready-to-show', () => {
     autoUpdater.checkForUpdatesAndNotify()
-  })
-  autoUpdater.on('update-available', () => {
-    win.webContents.send('update_available')
-  })
-  autoUpdater.on('update-downloaded', () => {
-    win.webContents.send('update_downloaded')
   })
 
 }
@@ -79,9 +74,20 @@ ipcMain.handle('read-station-logo', async (event, id) => {
   }
 })
 
+autoUpdater.on('update-available', () => {
+  win.webContents.send('update_available')
+})
+autoUpdater.on('update-downloaded', () => {
+  win.webContents.send('update_downloaded')
+})
+
+ipcMain.on('app_version', (event) => {
+  event.sender.send('app_version', { version: app.getVersion() })
+})
+
 ipcMain.on('restart_app', () => {
-  autoUpdater.quitAndInstall();
-});
+  autoUpdater.quitAndInstall()
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
