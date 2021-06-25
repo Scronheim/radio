@@ -19,6 +19,7 @@ module.exports = {
           provider: "github",
           owner: "scronheim",
           repo: "radio",
+          releaseType: "release"
         }
       ],
     }
