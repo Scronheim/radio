@@ -43,8 +43,7 @@ export default {
         }), {timeout: 0})
       })
 
-      ipcRenderer.on('download-progress', (progress) => {
-        console.log(progress)
+      ipcRenderer.on('download-progress', (ev, progress) => {
         Object.assign(this.progress, progress)
       })
 
