@@ -2,6 +2,27 @@
   <v-app>
     <v-main>
       <router-view/>
+      <v-dialog v-model="downloadDialog" width="70%" persistent>
+        <v-card>
+          <v-card-title>Updating</v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col>
+                <v-progress-linear :value="progress.percent" height="25">
+                  <template v-slot:default="{ value }">
+                    <strong>{{ transferredInMb }}/{{ totalInMb }} MB ({{ Math.ceil(value) }}%)</strong>
+                  </template>
+                </v-progress-linear>
+                <p>Download speed: {{ downloadSpeedInMb }} mb/s</p>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions v-if="showRestartButton">
+            <v-spacer/>
+            <v-btn color="success" @click="restartApp">{{ $t('texts.restartApp') }}</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-main>
     <v-footer fixed>
       <player/>
@@ -22,7 +43,20 @@ export default {
     })
     this.$store.commit('setWebSocket')
   },
+  computed: {
+    totalInMb() {
+      return parseFloat(this.progress.total / 1024 / 1024).toFixed(2)
+    },
+    transferredInMb() {
+      return parseFloat(this.progress.transferred / 1024 / 1024).toFixed(2)
+    },
+    downloadSpeedInMb() {
+      return parseFloat(this.progress.bytesPerSecond / 1024 / 1024).toFixed(2)
+    }
+  },
   data: () => ({
+    downloadDialog: false,
+    showRestartButton: false,
     progress: {
       bytesPerSecond: '',
       percent: '',
@@ -35,27 +69,20 @@ export default {
       ipcRenderer.on('update_available', () => {
         // ipcRenderer.removeAllListeners('update_available')
         this.$toast.info(this.$t('texts.updateAvailable'))
-        this.$toast.info(this.$t('texts.download', {
-          downloadSpeed: this.progress.bytesPerSecond,
-          downloaded: this.progress.percent,
-          transferred: this.progress.transferred,
-          total: this.progress.total
-        }), {timeout: 0})
+        this.downloadDialog = true
       })
 
       ipcRenderer.on('download-progress', (ev, progress) => {
-        console.log(ev, progress)
-        Object.assign(this.progress, progress)
+        this.progress = Object.assign({}, progress)
       })
 
-      // ipcRenderer.on('update_downloaded', () => {
-      //   ipcRenderer.removeAllListeners('update_downloaded')
-      //   this.$toast.info(this.$t('texts.updateDownloaded'))
-      //   setTimeout(() => {
-      //     ipcRenderer.send('restart_app')
-      //   }, 3000)
-      // })
+      ipcRenderer.on('update_downloaded', () => {
+        this.showRestartButton = true
+      })
     },
+    restartApp() {
+      ipcRenderer.send('restart_app')
+    }
   }
 };
 </script>

@@ -35,7 +35,6 @@ async function createWindow() {
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
-    win.webContents.openDevTools()
   }
   win.webContents.on('new-window', function(e, url) {
     e.preventDefault()
@@ -106,11 +105,9 @@ ipcMain.handle('check-updates', () => {
   autoUpdater.checkForUpdates()
 })
 
-
-
-// ipcMain.on('restart_app', () => {
-//   autoUpdater.quitAndInstall()
-// })
+ipcMain.on('restart_app', () => {
+  autoUpdater.quitAndInstall()
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
