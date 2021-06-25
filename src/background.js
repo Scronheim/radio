@@ -6,7 +6,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 const version = require('../package.json').version
 const fs = require('fs')
 const path = require('path')
-const { autoUpdater } = require('electron-differential-updater')
+const { autoUpdater } = require('electron-updater')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
