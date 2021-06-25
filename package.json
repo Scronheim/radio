@@ -1,6 +1,6 @@
 {
   "name": "radio",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -36,7 +36,9 @@
       }
     ],
     "linux": {
-      "publish": ["github"],
+      "publish": [
+        "github"
+      ],
       "category": "media",
       "icon": "dist_electron/icon64.png",
       "target": [
