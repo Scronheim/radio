@@ -1,6 +1,6 @@
 {
   "name": "radio",
-  "version": "0.1.12",
+  "version": "0.1.11",
   "private": true,
   "license": "MIT",
   "author": {
@@ -17,49 +17,13 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "deploy": "electron-builder build --win --linux --publish always"
+    "deploy": "vue-cli-service electron:build --linux --publish always"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Scronheim/radio"
   },
-  "main": "dist_electron/bundled/background.js",
-  "build": {
-    "productName": "Radio",
-    "appId": "ru.sconheim.radio",
-    "directories": {
-      "output": "build"
-    },
-    "files": [
-      "dist_electron/bundled/*"
-    ],
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "scronheim",
-        "repo": "radio"
-      }
-    ],
-    "linux": {
-      "publish": [
-        "github"
-      ],
-      "category": "media",
-      "icon": "dist_electron/icon64.png",
-      "target": [
-        "AppImage"
-      ]
-    },
-    "win": {
-      "publish": [
-        "github"
-      ],
-      "icon": "dist_electron/icon64.png",
-      "target": [
-        "nsis"
-      ]
-    }
-  },
+  "main": "background.js",
   "dependencies": {
     "@electron-forge/publisher-github": "^6.0.0-beta.57",
     "axios": "^0.21.1",
