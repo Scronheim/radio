@@ -105,9 +105,9 @@ ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() })
 })
 
-ipcMain.on('restart_app', () => {
-  autoUpdater.quitAndInstall()
-})
+// ipcMain.on('restart_app', () => {
+//   autoUpdater.quitAndInstall()
+// })
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
