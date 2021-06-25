@@ -39,13 +39,13 @@ export default {
         }), {timeout: 0})
       })
 
-      ipcRenderer.on('update_downloaded', () => {
-        ipcRenderer.removeAllListeners('update_downloaded')
-        this.$toast.info(this.$t('texts.updateDownloaded'))
-        setTimeout(() => {
-          ipcRenderer.send('restart_app')
-        }, 3000)
-      })
+      // ipcRenderer.on('update_downloaded', () => {
+      //   ipcRenderer.removeAllListeners('update_downloaded')
+      //   this.$toast.info(this.$t('texts.updateDownloaded'))
+      //   setTimeout(() => {
+      //     ipcRenderer.send('restart_app')
+      //   }, 3000)
+      // })
     },
   }
 };
