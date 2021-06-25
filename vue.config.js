@@ -19,7 +19,6 @@ module.exports = {
           provider: "github",
           owner: "scronheim",
           repo: "radio",
-          token: "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"
         }
       ],
     }

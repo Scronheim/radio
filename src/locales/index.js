@@ -91,7 +91,7 @@ const messages = {
       and: 'and',
       or: 'OR',
       updateAvailable: 'A new update is available. Downloading now...',
-      updateDownloaded: 'Update Downloaded. Restart now?',
+      updateDownloaded: 'Update downloaded. Restarting...',
       restartApp: 'Restart app'
     },
     newRadio: {
