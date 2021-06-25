@@ -12,7 +12,7 @@ const { autoUpdater } = require('electron-updater')
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
-Menu.setApplicationMenu(null)
+// Menu.setApplicationMenu(null)
 let win
 async function createWindow() {
   // Create the browser window.
