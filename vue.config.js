@@ -2,38 +2,26 @@ module.exports = {
   productionSourceMap: false,
   pluginOptions: {
     electronBuilder: {
+      builderOptions: {
+        win: {
+          icon: 'public/icon512.png'
+        },
+        linux: {
+          category: 'AudioVideo',
+          icon: 'public/icon512.png'
+        }
+      },
       nodeIntegration: true,
       productName: "Radio",
       appId: "ru.scronheim.radio",
-      files: [
-        "dist_electron/bundled/*"
-      ],
       publish: [
         {
           provider: "github",
           owner: "scronheim",
-          repo: "radio"
+          repo: "radio",
+          token: "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"
         }
       ],
-      linux: {
-        publish: [
-          "github"
-        ],
-        category: "media",
-        icon: "dist_electron/icon64.png",
-        target: [
-          "AppImage"
-        ]
-      },
-      win: {
-        publish: [
-          "github"
-        ],
-        icon: "dist_electron/icon64.png",
-        target: [
-          "nsis"
-        ]
-      }
     }
   },
   transpileDependencies: [
