@@ -59,7 +59,7 @@ export default {
     showRestartButton: false,
     progress: {
       bytesPerSecond: '',
-      percent: '',
+      percent: 0,
       transferred: '',
       total: ''
     }
@@ -71,7 +71,6 @@ export default {
       })
 
       ipcRenderer.on('update_available', () => {
-        // ipcRenderer.removeAllListeners('update_available')
         this.$toast.info(this.$t('texts.updateAvailable'))
         this.downloadDialog = true
       })
