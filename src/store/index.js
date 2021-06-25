@@ -36,9 +36,13 @@ export default new Vuex.Store({
     webSocket: null,
     currentSongTimer: null,
     appName: remote.app.getName(),
-    version: remote.app.getVersion()
+    version: remote.app.getVersion(),
+    isLoading: false
   },
   mutations: {
+    setLoading(state, payload) {
+      state.isLoading = payload
+    },
     setPlaying(state, payload) {
       state.isPlaying = payload.state
       clearInterval(state.currentSongTimer)
@@ -206,6 +210,7 @@ export default new Vuex.Store({
     settings: state => state.settings,
     webSocket: state => state.webSocket,
     appName: state => state.appName,
-    version: state => state.version
+    version: state => state.version,
+    isLoading: state => state.isLoading
   },
 })

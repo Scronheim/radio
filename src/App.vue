@@ -87,11 +87,13 @@ export default {
   methods: {
     checkUpdates() {
       ipcRenderer.on('update_not_available', () => {
+        this.$store.commit('setLoading', false)
         this.$toast.info(this.$t('texts.updateNotAvailable'))
       })
 
-      ipcRenderer.on('update_available', () => {
-        this.$toast.info(this.$t('texts.updateAvailable'))
+      ipcRenderer.on('update_available', (ev, release) => {
+        this.$store.commit('setLoading', false)
+        this.$toast.info(this.$t('texts.updateAvailable', {version: release.version}))
         this.downloadDialog = true
       })
 

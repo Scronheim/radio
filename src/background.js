@@ -93,12 +93,12 @@ autoUpdater.on('download-progress', (progressObj) => {
   win.webContents.send('download-progress', progressObj)
 })
 
-autoUpdater.on('update-available', () => {
-  win.webContents.send('update_available')
+autoUpdater.on('update-available', (release) => {
+  win.webContents.send('update_available', release)
 })
 
-autoUpdater.on('update-not-available', () => {
-  win.webContents.send('update_not_available')
+autoUpdater.on('update-not-available', (release) => {
+  win.webContents.send('update_not_available', release)
 })
 
 autoUpdater.on('update-downloaded', () => {

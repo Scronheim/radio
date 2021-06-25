@@ -32,7 +32,7 @@
                 <v-btn icon class="mb-2" color="info"
                        v-on="on"
                        v-bind="attrs"
-                       :disabled="loading"
+                       :disabled="$store.getters.isLoading"
                        @click="checkUpdates">
                   <v-icon>{{ rotateRefreshButton }}</v-icon>
                 </v-btn>
@@ -246,18 +246,9 @@ import SettingsForm from "@/components/SettingsForm"
 export default {
   name: 'Home',
   components: {StationForm, GenreForm, CurrentStation, SettingsForm},
-  mounted() {
-    ipcRenderer.on('update_not_available', () => {
-      this.loading = false
-    })
-
-    ipcRenderer.on('update_downloaded', () => {
-      this.loading = false
-    })
-  },
   computed: {
     rotateRefreshButton() {
-      if (this.loading) {
+      if (this.$store.getters.isLoading) {
         return 'mdi-refresh mdi-spin'
       }
       return 'mdi-refresh'
@@ -286,7 +277,6 @@ export default {
     }
   },
   data: () => ({
-    loading: false,
     activeList: false,
     addStationDialog: false,
     editStationDialog: false,
@@ -319,7 +309,7 @@ export default {
   }),
   methods: {
     checkUpdates() {
-      this.loading = true
+      this.$store.commit('setLoading', true)
       ipcRenderer.invoke('check-updates')
     },
     deleteFav(index) {
