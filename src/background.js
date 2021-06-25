@@ -42,9 +42,9 @@ async function createWindow() {
     require('electron').shell.openExternal(url)
   })
 
-  win.once('ready-to-show', () => {
-    autoUpdater.checkForUpdatesAndNotify()
-  })
+  // win.once('ready-to-show', () => {
+  //   autoUpdater.checkForUpdatesAndNotify()
+  // })
 
 }
 // Quit when all windows are closed.
@@ -104,6 +104,12 @@ autoUpdater.on('update-downloaded', () => {
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() })
 })
+
+ipcMain.handle('check-updates', () => {
+  autoUpdater.checkForUpdates()
+})
+
+
 
 // ipcMain.on('restart_app', () => {
 //   autoUpdater.quitAndInstall()

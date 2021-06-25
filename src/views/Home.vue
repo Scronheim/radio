@@ -29,6 +29,17 @@
           <v-col align="end">
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
+                <v-btn icon class="mb-2" color="info"
+                       v-on="on"
+                       v-bind="attrs"
+                       @click="checkUpdates">
+                  <v-icon>mdi-refresh</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t('texts.checkUpdates') }}</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
                 <v-btn icon class="mb-2" color="white"
                        v-on="on"
                        v-bind="attrs"
@@ -225,6 +236,7 @@
 
 <script>
 // @ is an alias to /src
+import { ipcRenderer } from 'electron'
 import StationForm from "@/components/StationForm"
 import GenreForm from "@/components/GenreForm"
 import CurrentStation from "@/components/CurrentStation"
@@ -289,6 +301,9 @@ export default {
     folderIcon: 'mdi-folder-open'
   }),
   methods: {
+    checkUpdates() {
+      ipcRenderer.invoke('check-updates')
+    },
     deleteFav(index) {
       this.$store.dispatch('deleteFavorite', index)
       this.$toast.success(this.$t('newRadio.deleteStationText'))
