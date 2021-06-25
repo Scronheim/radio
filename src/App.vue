@@ -1,19 +1,14 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view/>
-    </v-main>
-    <v-footer fixed>
-      <player/>
-    </v-footer>
-  </v-app>
+  <div>
+
+  </div>
 </template>
 
 <script>
-import Player from "@/components/Player"
+// import Player from "@/components/Player"
 export default {
   name: 'App',
-  components: {Player},
+  // components: {Player},
   mounted() {
     this.$store.dispatch('refresh').then(() => {
       this.$vuetify.theme.dark = this.$store.getters.settings.theme === 'dark';
