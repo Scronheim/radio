@@ -11,13 +11,42 @@
     "electron:build linux": "vue-cli-service electron:build --linux",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "deploy": "electron-builder build --linux --publish always"
   },
-  "repository": "https://github.com/Scronheim/radio",
-  "updater": {
-    "url": "https://raw.githubusercontent.com/scronheim/radio/releases"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Scronheim/radio"
   },
   "main": "background.js",
+  "build": {
+    "productName": "Radio",
+    "appId": "ru.sconheim.radio",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "dist_electron/**/*"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "scronheim",
+        "repo": "radio"
+      }
+    ],
+    "linux": {
+      "publish": ["github"],
+      "category": "media",
+      "icon": "build/icon64.png",
+      "target": [
+        "AppImage"
+      ]
+    },
+    "win": {
+      "target": "nsis"
+    }
+  },
   "dependencies": {
     "@electron-forge/publisher-github": "^6.0.0-beta.57",
     "axios": "^0.21.1",

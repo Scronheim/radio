@@ -6,7 +6,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 const version = require('../package.json').version
 const fs = require('fs')
 const path = require('path')
-
+const { autoUpdater } = require('electron-updater')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -37,9 +37,20 @@ async function createWindow() {
     win.loadURL('app://./index.html')
   }
   win.webContents.on('new-window', function(e, url) {
-    e.preventDefault();
-    require('electron').shell.openExternal(url);
+    e.preventDefault()
+    require('electron').shell.openExternal(url)
   })
+
+  win.once('ready-to-show', () => {
+    autoUpdater.checkForUpdatesAndNotify()
+  })
+  autoUpdater.on('update-available', () => {
+    win.webContents.send('update_available')
+  })
+  autoUpdater.on('update-downloaded', () => {
+    win.webContents.send('update_downloaded')
+  })
+
 }
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -67,6 +78,10 @@ ipcMain.handle('read-station-logo', async (event, id) => {
     return fs.promises.readFile(`${imagePath}/${file}`)
   }
 })
+
+ipcMain.on('restart_app', () => {
+  autoUpdater.quitAndInstall();
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -96,6 +111,7 @@ app.on('ready', async () => {
 
   createWindow()
 })
+
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
