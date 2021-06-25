@@ -32,11 +32,11 @@ export default {
       ipcRenderer.on('update_downloaded', () => {
         ipcRenderer.removeAllListeners('update_downloaded')
         this.$toast.info(this.$t('texts.updateDownloaded'))
+        setTimeout(() => {
+          ipcRenderer.send('restart_app')
+        }, 3000)
       })
     },
-    restartApp() {
-      ipcRenderer.send('restart_app')
-    }
   }
 };
 </script>

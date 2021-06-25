@@ -21,7 +21,7 @@ const messages = {
       and: 'и',
       or: 'ИЛИ',
       updateAvailable: 'Доступна новая версия программы. Скачиваю',
-      updatedDownloaded: 'Новая версия успешно загружена. Перезапускаем?',
+      updateDownloaded: 'Новая версия успешно загружена. Перезапускаем?',
       restartApp: 'Перезапустить'
     },
     newRadio: {
@@ -91,7 +91,7 @@ const messages = {
       and: 'and',
       or: 'OR',
       updateAvailable: 'A new update is available. Downloading now...',
-      updatedDownloaded: 'Update Downloaded. Restart now?',
+      updateDownloaded: 'Update Downloaded. Restart now?',
       restartApp: 'Restart app'
     },
     newRadio: {
