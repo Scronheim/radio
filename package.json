@@ -1,6 +1,6 @@
 {
   "name": "radio",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": true,
   "license": "MIT",
   "author": {
@@ -41,15 +41,23 @@
       }
     ],
     "linux": {
-      "publish": ["github"],
+      "publish": [
+        "github"
+      ],
       "category": "media",
       "icon": "dist_electron/icon64.png",
-      "target": ["AppImage"]
+      "target": [
+        "AppImage"
+      ]
     },
     "win": {
-      "publish": ["github"],
+      "publish": [
+        "github"
+      ],
       "icon": "dist_electron/icon64.png",
-      "target": ["nsis"]
+      "target": [
+        "nsis"
+      ]
     }
   },
   "dependencies": {
