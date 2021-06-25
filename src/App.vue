@@ -33,7 +33,7 @@ export default {
   methods: {
     checkUpdates() {
       ipcRenderer.on('update_available', () => {
-        ipcRenderer.removeAllListeners('update_available')
+        // ipcRenderer.removeAllListeners('update_available')
         this.$toast.info(this.$t('texts.updateAvailable'))
         this.$toast.info(this.$t('texts.download', {
           downloadSpeed: this.progress.bytesPerSecond,
@@ -44,6 +44,7 @@ export default {
       })
 
       ipcRenderer.on('download-progress', (progress) => {
+        console.log(progress)
         Object.assign(this.progress, progress)
       })
 

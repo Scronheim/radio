@@ -88,9 +88,6 @@ if (process.env.DESKTOPINTEGRATION === 'AppImageLauncher') {
 
 autoUpdater.on('download-progress', (progressObj) => {
   autoUpdater.logger.info(JSON.stringify(progressObj))
-  // let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  // log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-  // log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
   win.webContents.send('download-progress', progressObj)
 })
 
