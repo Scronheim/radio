@@ -24,9 +24,7 @@ const messages = {
       updateAvailable: 'Доступна новая версия программы. Скачиваю...',
       updateDownloaded: 'Новая версия успешно скачана. Перезапускаюсь...',
       restartApp: 'Перезапустить',
-      download: `Скорость загрузки: {downloadSpeed}<br>
-                      Скачано: {downloaded}<br>
-                      ({transferred}/{total})`,
+      download: `Скорость загрузки: {downloadSpeed}<br>Скачано: {downloaded}<br>({transferred}/{total})`,
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -98,9 +96,7 @@ const messages = {
       updateAvailable: 'A new update is available. Downloading now...',
       updateDownloaded: 'Update downloaded. Restarting...',
       restartApp: 'Restart app',
-      download: `Download speed: {downloadSpeed}<br>
-                      Downloaded: {downloaded}<br>
-                      ({transferred}/{total})`,
+      download: `Download speed: {downloadSpeed}<br>Downloaded: {downloaded}<br>({transferred}/{total})`,
     },
     newRadio: {
       title: 'Add station',
