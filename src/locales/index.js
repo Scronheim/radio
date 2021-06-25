@@ -19,7 +19,10 @@ const messages = {
       noFavorites: 'Избранных станций пока нет',
       catalog: 'Каталог станций',
       and: 'и',
-      or: 'ИЛИ'
+      or: 'ИЛИ',
+      updateAvailable: 'Доступна новая версия программы. Скачиваю',
+      updatedDownloaded: 'Новая версия успешно загружена. Перезапускаем?',
+      restartApp: 'Перезапустить'
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -86,7 +89,10 @@ const messages = {
       noFavorites: 'No Favorites',
       catalog: 'Catalog',
       and: 'and',
-      or: 'OR'
+      or: 'OR',
+      updateAvailable: 'A new update is available. Downloading now...',
+      updatedDownloaded: 'Update Downloaded. Restart now?',
+      restartApp: 'Restart app'
     },
     newRadio: {
       title: 'Add station',

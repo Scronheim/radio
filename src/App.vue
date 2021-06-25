@@ -1,20 +1,43 @@
 <template>
-  <div>
-
-  </div>
+  <v-app>
+    <v-main>
+      <router-view/>
+    </v-main>
+    <v-footer fixed>
+      <player/>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-// import Player from "@/components/Player"
+import { ipcRenderer } from 'electron'
+import Player from "@/components/Player"
 export default {
   name: 'App',
-  // components: {Player},
+  components: {Player},
   mounted() {
+    this.checkUpdates()
     this.$store.dispatch('refresh').then(() => {
       this.$vuetify.theme.dark = this.$store.getters.settings.theme === 'dark';
     })
     this.$store.commit('setWebSocket')
   },
+  methods: {
+    checkUpdates() {
+      ipcRenderer.on('update_available', () => {
+        ipcRenderer.removeAllListeners('update_available')
+        this.$toast.info(this.$t('texts.updateAvailable'))
+      })
+
+      ipcRenderer.on('update_downloaded', () => {
+        ipcRenderer.removeAllListeners('update_downloaded')
+        this.$toast.info(this.$t('texts.updateDownloaded'))
+      })
+    },
+    restartApp() {
+      ipcRenderer.send('restart_app')
+    }
+  }
 };
 </script>
 
