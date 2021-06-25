@@ -35,6 +35,7 @@ async function createWindow() {
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
+    win.webContents.openDevTools()
   }
   win.webContents.on('new-window', function(e, url) {
     e.preventDefault()
@@ -87,7 +88,6 @@ if (process.env.DESKTOPINTEGRATION === 'AppImageLauncher') {
 }
 
 autoUpdater.on('download-progress', (progressObj) => {
-  autoUpdater.logger.info(JSON.stringify(progressObj))
   win.webContents.send('download-progress', progressObj)
 })
 
