@@ -42,6 +42,17 @@ Vue.filter('getGenreText', function(value) {
   }).name
 })
 
+Vue.filter('getCountryText', function(value) {
+  if (!value) return ''
+  const result = store.getters.countries.find((country) => {
+    return country.id === value
+  })
+  if (store.getters.settings.locale === 'en') {
+    return result.name
+  }
+  return result.ru_name
+})
+
 Vue.use(Toast, {
   transition: "Vue-Toastification__bounce",
   maxToasts: 3,

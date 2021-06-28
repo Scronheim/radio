@@ -76,7 +76,7 @@
       <v-col class="text-right" tag="strong" cols="6">
         {{ $t('newRadio.country') }}:
       </v-col>
-      <v-col>{{ $store.getters.currentStation.country }}</v-col>
+      <v-col>{{ $store.getters.currentStation.country | getCountryText }}</v-col>
       <v-col class="text-right" tag="strong" cols="6">
         {{ $t('newRadio.bitrate') }}:
       </v-col>

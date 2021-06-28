@@ -26,7 +26,11 @@ const messages = {
       updateDownloaded: 'Новая версия успешно скачана. Перезапускаюсь...',
       restartApp: 'Перезапустить',
       downloadSpeed: 'Скорость загрузки',
-      updating: 'Обновление'
+      updating: 'Обновление',
+      general: 'Основные',
+      decor: 'Оформление',
+      about: 'О программе',
+      slogan: 'Слушай радио и наслаждайся! ;)'
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -100,7 +104,11 @@ const messages = {
       updateDownloaded: 'Update downloaded. Restarting...',
       restartApp: 'Restart app',
       downloadSpeed: 'Download speed',
-      updating: 'Updating'
+      updating: 'Updating',
+      general: 'General',
+      decor: 'Decor',
+      about: 'About',
+      slogan: 'Listen radio and enjoy! ;)'
     },
     newRadio: {
       title: 'Add station',

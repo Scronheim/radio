@@ -27,7 +27,26 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-text-field dense :label="$t('newRadio.country')" v-model="station.country"/>
+        <v-autocomplete
+            v-model="station.country"
+            :items="$store.getters.countries"
+            dense
+            color="blue-grey lighten-2"
+            :label="$t('newRadio.country')"
+            :item-text="$store.getters.settings.locale === 'en'? 'name': 'ru_name'"
+            item-value="id"
+        >
+          <template v-slot:item="data">
+            <template>
+              <v-list-item-avatar>
+                <img :src="`/flags/${data.item.id}-${data.item.name.toLowerCase()}.svg`">
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ $store.getters.settings.locale === 'en'? data.item.name: data.item.ru_name }}</v-list-item-title>
+              </v-list-item-content>
+            </template>
+          </template>
+        </v-autocomplete>
       </v-col>
       <v-col>
         <v-text-field type="number" dense :label="$t('newRadio.bitrate')" v-model.number="station.bitrate"/>
