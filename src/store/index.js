@@ -12,6 +12,7 @@ export default new Vuex.Store({
     },
     favorites: [],
     stations: [],
+    countries: [],
     genres: [],
     currentStation: {
       current_song: '',
@@ -124,6 +125,9 @@ export default new Vuex.Store({
     setEqualizerColor(state, payload) {
       state.settings.equalizerColors[payload.percent] = payload.color
     },
+    fillCountries(state, payload) {
+      state.countries = payload
+    }
   },
   actions: {
     scanStationLogo(context) {
@@ -150,11 +154,12 @@ export default new Vuex.Store({
       context.dispatch('saveSettings')
     },
     refresh(context) {
-      return Promise.all([context.dispatch('getStations'), context.dispatch('getGenres')]).then((response) => {
+      return Promise.all([context.dispatch('getStations'), context.dispatch('getGenres'), context.dispatch('getCountries')]).then((response) => {
         context.dispatch('getFavorites')
         context.dispatch('getSettings')
         context.commit('fillStations', response[0].data.data)
         context.commit('fillGenres', response[1].data.data)
+        context.commit('fillCountries', response[2].data.data)
         context.commit('fillCategories')
       })
     },
@@ -174,6 +179,9 @@ export default new Vuex.Store({
     },
     getStations(context) {
       return axios.get(`${context.state.apiHost}/api/stations`)
+    },
+    getCountries(context) {
+      return axios.get(`${context.state.apiHost}/api/countries`)
     },
     async addNewStation(context, payload) {
       return await axios.post(`${context.state.apiHost}/api/stations`, payload)
@@ -201,6 +209,7 @@ export default new Vuex.Store({
     player: state => state.player,
     favorites: state => state.favorites,
     stations: state => state.stations,
+    countries: state => state.countries,
     genres: state => state.genres,
     categories: state => state.categories,
     currentStation: state => state.currentStation,

@@ -1,6 +1,7 @@
 "use strict"
 const STATIONS_TABLE = 'stations'
 const GENRES_TABLE = 'genres'
+const COUNTRIES_TABLE = 'countries'
 
 class DB {
   constructor() {
@@ -33,8 +34,16 @@ class DB {
     return this.db.select().from(GENRES_TABLE).orderBy('name', 'asc')
   }
 
+  selectCountries() {
+    return this.db.select().from(COUNTRIES_TABLE).orderBy('name', 'asc')
+  }
+
   insertStation(station) {
     return this.db(STATIONS_TABLE).insert(station)
+  }
+
+  insertCountry(country) {
+    return this.db(COUNTRIES_TABLE).insert(country)
   }
 
   insertGenre(genre) {
@@ -45,8 +54,16 @@ class DB {
     return this.db(GENRES_TABLE).where('id', '=', genre.id).update(genre)
   }
 
+  updateCountry(country) {
+    return this.db(COUNTRIES_TABLE).where('id', '=', country.id).update(country)
+  }
+
   deleteGenre(id) {
     return this.db(GENRES_TABLE).where('id', id).delete()
+  }
+
+  deleteCountry(id) {
+    return this.db(COUNTRIES_TABLE).where('id', id).delete()
   }
 
   deleteStation(id) {

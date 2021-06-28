@@ -10,14 +10,14 @@
   "description": "Application for listening radio",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service electron:build --windows nsis",
+    "build": "vue-cli-service electron:build --windows nsis --linux appimage",
     "lint": "vue-cli-service lint",
     "electron:build windows": "vue-cli-service electron:build --windows",
     "electron:build linux": "vue-cli-service electron:build --linux",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "deploy": "npm version patch && vue-cli-service electron:build --windows nsis --publish always"
+    "deploy": "npm version patch && vue-cli-service electron:build --windows nsis --linux appimage --publish always"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,6 @@
   },
   "main": "background.js",
   "dependencies": {
-    "@imjs/electron-differential-updater": "^5.1.6",
     "@wuild/vue-titlebar": "^1.0.1",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
@@ -38,7 +37,6 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "mysql2": "^2.2.5",
-    "update-electron-app": "^2.0.1",
     "vue": "^2.6.11",
     "vue-i18n": "^8.24.4",
     "vue-router": "^3.2.0",
@@ -57,7 +55,6 @@
     "dom-parser": "^0.1.6",
     "electron": "^12.0.0",
     "electron-devtools-installer": "^3.1.0",
-    "electron-differential-updater": "^4.3.2",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "fast-xml-parser": "^3.19.0",
