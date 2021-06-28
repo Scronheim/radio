@@ -73,6 +73,29 @@ router.route('/api/stations')
     })
   })
 
+router.route('/api/countries')
+  .get((req, res) => {
+    db.selectCountries().then((response) => {
+      jsonResponse(res, response)
+    }).catch((error) => {
+      jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
+    })
+  })
+  .post((req, res) => {
+    db.insertCountry(req.body).then((response) => {
+      jsonResponse(res, response)
+    }).catch((error) => {
+      jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
+    })
+  })
+  .patch((req, res) => {
+    db.updateCountry(req.body).then((response) => {
+      jsonResponse(res, response)
+    }).catch((error) => {
+      jsonResponse(res, null, {message: error.sqlMessage, code: error.errno}, false)
+    })
+  })
+
 
 router.route('/api/genres')
   .get((req, res) => {
