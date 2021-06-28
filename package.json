@@ -10,14 +10,14 @@
   "description": "Application for listening radio",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service electron:build --windows nsis --linux appimage",
+    "build": "vue-cli-service electron:build --windows nsis",
     "lint": "vue-cli-service lint",
     "electron:build windows": "vue-cli-service electron:build --windows",
     "electron:build linux": "vue-cli-service electron:build --linux",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "deploy": "npm version patch && vue-cli-service electron:build --windows nsis --linux appimage --publish always"
+    "deploy": "npm version patch && vue-cli-service electron:build --windows nsis --publish always"
   },
   "repository": {
     "type": "git",
