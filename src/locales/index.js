@@ -30,7 +30,8 @@ const messages = {
       general: 'Основные',
       decor: 'Оформление',
       about: 'О программе',
-      slogan: 'Слушай радио и наслаждайся! ;)'
+      slogan: 'Слушай радио и наслаждайся! ;)',
+      rateThisStation: 'Оцени станцию'
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -108,7 +109,8 @@ const messages = {
       general: 'General',
       decor: 'Decor',
       about: 'About',
-      slogan: 'Listen radio and enjoy! ;)'
+      slogan: 'Listen radio and enjoy! ;)',
+      rateThisStation: 'Rate this station'
     },
     newRadio: {
       title: 'Add station',

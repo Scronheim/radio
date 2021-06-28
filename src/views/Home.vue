@@ -168,7 +168,7 @@
         </div>
       </v-col>
       <v-divider vertical/>
-      <v-col class="d-flex text-center">
+      <v-col>
         <current-station @show-edit-station-dialog="showEditStationDialog"/>
       </v-col>
     </v-row>

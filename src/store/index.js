@@ -28,6 +28,7 @@ export default new Vuex.Store({
         100: '#fff'
       }
     },
+    ratings: [],
     categories: [],
     serverTypes: ['icecast', 'shoutcast', '101.ru'],
     isPlaying: false,
@@ -76,6 +77,19 @@ export default new Vuex.Store({
     },
     setPlayerVolume(state, payload) {
       state.player.element.volume = payload
+    },
+    addRating(state, payload) {
+      let rating = state.ratings.find((r) => {
+        return r.station_id === payload.station_id
+      })
+      if (rating) {
+        rating.rating = payload.rating
+      } else {
+        state.ratings.push(payload)
+      }
+    },
+    fillRating(state, payload) {
+      state.ratings = payload
     },
     fillStations(state, payload) {
       state.stations = payload
@@ -141,6 +155,15 @@ export default new Vuex.Store({
     saveSettings(context) {
       localStorage.setItem('settings', JSON.stringify(context.state.settings))
     },
+    saveRatings(context) {
+      localStorage.setItem('ratings', JSON.stringify(context.state.ratings))
+    },
+    getRatings(context) {
+      let ratings = JSON.parse(localStorage.getItem('ratings'))
+      if (ratings) {
+        context.commit('fillRating', ratings)
+      }
+    },
     getSettings(context) {
       let settings = JSON.parse(localStorage.getItem('settings'))
       if (!settings) {
@@ -156,6 +179,7 @@ export default new Vuex.Store({
     refresh(context) {
       return Promise.all([context.dispatch('getStations'), context.dispatch('getGenres'), context.dispatch('getCountries')]).then((response) => {
         context.dispatch('getFavorites')
+        context.dispatch('getRatings')
         context.dispatch('getSettings')
         context.commit('fillStations', response[0].data.data)
         context.commit('fillGenres', response[1].data.data)
@@ -212,6 +236,14 @@ export default new Vuex.Store({
     countries: state => state.countries,
     genres: state => state.genres,
     categories: state => state.categories,
+    ratings: state => state.ratings,
+    stationRating: state => {
+      const rating = state.ratings.find(r => r.station_id === state.currentStation.id)
+      if (rating) {
+        return rating
+      }
+      return {rating: 0, station_id: state.currentStation.id}
+    },
     currentStation: state => state.currentStation,
     currentSong: state => state.currentSong,
     serverTypes: state => state.serverTypes,
