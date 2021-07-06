@@ -58,8 +58,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn absolute right fab small color="yellow" style="margin-right: 55px"
                  v-on="on"
-                 v-bind="attrs"
-                 @click="">
+                 v-bind="attrs">
             <v-icon color="black">
               mdi-thumb-up
             </v-icon>

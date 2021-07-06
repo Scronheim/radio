@@ -1,5 +1,5 @@
 'use strict'
-import { app, protocol, ipcMain, BrowserWindow, Menu } from 'electron'
+import { app, protocol, ipcMain, BrowserWindow, Menu, Tray } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -13,12 +13,15 @@ protocol.registerSchemesAsPrivileged([
 ])
 Menu.setApplicationMenu(null)
 let win
+let tray = null
+
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1400,
     height: 880,
     title: `Radio v${app.getVersion()}`,
+    icon: 'public/icon512.png',
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -47,6 +50,25 @@ async function createWindow() {
   //   autoUpdater.checkForUpdatesAndNotify()
   // })
 
+}
+
+app.whenReady().then(() => {
+  tray = new Tray('public/icon512.png')
+  const contextMenu = Menu.buildFromTemplate([
+    {label: 'Play', type: 'normal', click: sendPlay},
+    {label: 'Pause', type: 'normal', click: sendPause},
+    {label: 'Quit', role: 'quit'},
+  ])
+  tray.setToolTip('This is my application.')
+  tray.setContextMenu(contextMenu)
+})
+
+function sendPlay(item, window, event) {
+  win.webContents.send('play')
+}
+
+function sendPause(item, window, event) {
+  win.webContents.send('pause')
 }
 
 // Quit when all windows are closed.

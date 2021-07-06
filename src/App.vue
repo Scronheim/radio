@@ -48,6 +48,12 @@ export default {
   components: {Player},
   mounted() {
     this.$vuetify.theme.dark = true
+    ipcRenderer.on('play', () => {
+      this.$store.commit('setPlaying', {state: true, station: this.$store.getters.currentStation})
+    })
+    ipcRenderer.on('pause', () => {
+      this.$store.commit('setPlaying', {state: false})
+    })
     this.checkUpdates()
     this.$store.dispatch('refresh').then(() => {
       if (this.$store.getters.settings.theme !== 'dark') {
