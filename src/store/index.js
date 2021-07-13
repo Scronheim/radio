@@ -244,6 +244,12 @@ export default new Vuex.Store({
       }
       return {rating: 0, station_id: state.currentStation.id}
     },
+    currentStationInFavorites: state => {
+      const station = state.favorites.find((f) => {
+        return f.id === state.currentStation.id
+      })
+      return !!station
+    },
     currentStation: state => state.currentStation,
     currentSong: state => state.currentSong,
     serverTypes: state => state.serverTypes,

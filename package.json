@@ -17,7 +17,7 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "deploy": "npm version patch && vue-cli-service electron:build --windows nsis --publish always"
+    "deploy": "vue-cli-service electron:build --windows nsis --linux appimage --publish always"
   },
   "repository": {
     "type": "git",

@@ -157,11 +157,11 @@ app.on('ready', async () => {
         if (err) {
           console.log('Directory not created')
         } else {
-          fs.writeFileSync(`${imagePath}/${payload.name}`, new Buffer(payload.buffer))
+          fs.writeFileSync(`${imagePath}/${payload.name}`, new Buffer.from(payload.buffer))
         }
       })
     } else {
-      fs.writeFileSync(`${imagePath}/${payload.name}`, new Buffer(payload.buffer))
+      fs.writeFileSync(`${imagePath}/${payload.name}`, new Buffer.from(payload.buffer))
     }
   })
 

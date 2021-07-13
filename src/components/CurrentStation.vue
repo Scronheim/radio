@@ -54,17 +54,31 @@
         </template>
         <span>{{ $t('newRadio.titleEdit') }}</span>
       </v-tooltip>
-      <v-tooltip bottom>
+      <v-tooltip bottom v-if="!$store.getters.currentStationInFavorites">
         <template v-slot:activator="{ on, attrs }">
           <v-btn absolute right fab small color="yellow" style="margin-right: 55px"
                  v-on="on"
-                 v-bind="attrs">
+                 v-bind="attrs"
+          @click="addFavorite">
             <v-icon color="black">
               mdi-thumb-up
             </v-icon>
           </v-btn>
         </template>
         <span>{{ $t('texts.addFavorites') }}</span>
+      </v-tooltip>
+      <v-tooltip bottom v-else>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn absolute right fab small color="yellow" style="margin-right: 55px"
+                 v-on="on"
+                 v-bind="attrs"
+                 @click="deleteFavorite">
+            <v-icon color="black">
+              mdi-thumb-down
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $t('texts.deleteFavorites') }}</span>
       </v-tooltip>
       <v-toolbar dense color="grey darken-3" elevation="9">
         <v-toolbar-title>{{ $store.getters.currentStation.name }}</v-toolbar-title>
@@ -125,8 +139,8 @@
             </v-row>
           </v-col>
           <v-col>
-            <v-img v-if="$store.getters.currentStation.logo_blob" :height="200" contain :src="$store.getters.currentStation.logo_blob"/>
-            <v-img v-else-if="$store.getters.currentStation.logo_src" :height="200" contain :src="$store.getters.currentStation.logo_src"/>
+            <v-img v-if="$store.getters.currentStation.logo_blob" :height="200" :width="200" contain :src="$store.getters.currentStation.logo_blob"/>
+            <v-img v-else-if="$store.getters.currentStation.logo_src" :height="200" :width="200" contain :src="$store.getters.currentStation.logo_src"/>
           </v-col>
         </v-row>
       </v-card-text>
@@ -216,6 +230,19 @@ export default {
     timer: null,
   }),
   methods: {
+    addFavorite() {
+      this.$store.commit('addFavorite', this.$store.getters.currentStation)
+      this.$store.dispatch('saveFavorites')
+      this.$toast.success(this.$t('texts.favoriteAdded'))
+    },
+    deleteFavorite() {
+      const stationIndex = this.$store.getters.favorites.findIndex((f) => {
+        return f.id === this.$store.getters.currentStation.id
+      })
+      this.$store.dispatch('deleteFavorite', stationIndex)
+      this.$toast.success(this.$t('texts.favoriteDeleted'))
+      this.$store.dispatch('saveFavorites')
+    },
     setRating(rating) {
       this.$store.commit('addRating', {rating: rating, station_id: this.$store.getters.currentStation.id})
       this.$store.dispatch('saveRatings')
