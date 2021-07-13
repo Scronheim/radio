@@ -97,7 +97,7 @@ const messages = {
       favorites: 'Favorites',
       addFavorites: 'Add favorites',
       favoriteAdded: 'Station added to favorites',
-      favoriteDeleted: 'Station deleted to favorites',
+      favoriteDeleted: 'Station deleted from favorites',
       deleteFavorites: 'Delete from favorites',
       noFavorites: 'No Favorites',
       catalog: 'Catalog',
