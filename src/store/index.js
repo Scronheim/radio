@@ -112,9 +112,6 @@ export default new Vuex.Store({
         }
       })
     },
-    setCurrentSong(state, payload) {
-      state.currentSong = payload
-    },
     addFavorite(state, payload) {
       state.favorites.push(payload)
     },
@@ -251,7 +248,17 @@ export default new Vuex.Store({
       return !!station
     },
     currentStation: state => state.currentStation,
-    currentSong: state => state.currentSong,
+    currentSong: state => {
+      if (state.currentSong !== '') {
+        const payload = {
+          date: new Date(),
+          station: state.currentStation,
+          song: state.currentSong
+        }
+        ipcRenderer.invoke('write-current-track', payload)
+      }
+      return state.currentSong
+    },
     serverTypes: state => state.serverTypes,
     isPlaying: state => state.isPlaying,
     settings: state => state.settings,
