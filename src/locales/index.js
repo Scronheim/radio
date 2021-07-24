@@ -36,7 +36,7 @@ const messages = {
       slogan: 'Слушай радио и наслаждайся! ;)',
       rateThisStation: 'Оцени станцию',
       likeText: 'Понравилось',
-      likedTracksText: 'Понравившееся треки'
+      likedTracksText: 'Понравившеися треки'
     },
     newRadio: {
       title: 'Добавить новую станцию',
