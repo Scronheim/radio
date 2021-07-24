@@ -126,7 +126,8 @@ ipcMain.handle('check-updates', () => {
 })
 
 ipcMain.handle('write-current-track', (event, payload) => {
-  fs.writeFile('songs list.txt', `[${payload.date}] - Station: ${payload.station.name}, Song: ${payload.song}\n`, { flag: 'a+' }, err => {})
+  fs.writeFile('songs list.txt', `[${payload.date}] - Станция: ${payload.station.name}, Трек: ${payload.song}\n`,
+      { flag: 'a+' }, err => {})
 })
 
 ipcMain.on('restart_app', () => {
