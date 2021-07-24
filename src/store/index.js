@@ -11,6 +11,7 @@ export default new Vuex.Store({
       element: HTMLElement,
     },
     favorites: [],
+    likedTracks: [],
     stations: [],
     countries: [],
     genres: [],
@@ -118,6 +119,15 @@ export default new Vuex.Store({
     setFavorites(state, payload) {
       state.favorites = payload
     },
+    addLikedTrack(state, track) {
+      state.likedTracks.push(track)
+    },
+    removeLikedTrack(state, index) {
+      state.likedTracks.splice(index, 1)
+    },
+    setLikedTracks(state, payload) {
+      state.likedTracks = payload
+    },
     setSettings(state, payload) {
       Object.assign(state.settings, payload)
     },
@@ -176,6 +186,7 @@ export default new Vuex.Store({
     refresh(context) {
       return Promise.all([context.dispatch('getStations'), context.dispatch('getGenres'), context.dispatch('getCountries')]).then((response) => {
         context.dispatch('getFavorites')
+        context.dispatch('getLikedTracks')
         context.dispatch('getRatings')
         context.dispatch('getSettings')
         context.commit('fillStations', response[0].data.data)
@@ -191,8 +202,17 @@ export default new Vuex.Store({
         context.commit('setFavorites', fav)
       }
     },
-    saveFavorites(context) {
-      localStorage.setItem('favorites', JSON.stringify(context.state.favorites))
+    getLikedTracks(context) {
+      const tracks = localStorage.getItem('likedTracks')
+      if (tracks) {
+        context.commit('setLikedTracks', JSON.parse(tracks))
+      }
+    },
+    saveFavorites({ state }) {
+      localStorage.setItem('favorites', JSON.stringify(state.favorites))
+    },
+    saveLikedTracks({ state }) {
+      localStorage.setItem('likedTracks', JSON.stringify(state.likedTracks))
     },
     deleteFavorite(context, index) {
       context.state.favorites.splice(index)
@@ -229,6 +249,7 @@ export default new Vuex.Store({
   getters: {
     player: state => state.player,
     favorites: state => state.favorites,
+    likedTracks: state => state.likedTracks,
     stations: state => state.stations,
     countries: state => state.countries,
     genres: state => state.genres,
@@ -248,17 +269,7 @@ export default new Vuex.Store({
       return !!station
     },
     currentStation: state => state.currentStation,
-    currentSong: state => {
-      if (state.currentSong !== '') {
-        const payload = {
-          date: new Date(),
-          station: state.currentStation,
-          song: state.currentSong
-        }
-        ipcRenderer.invoke('write-current-track', payload)
-      }
-      return state.currentSong
-    },
+    currentSong: state => state.currentSong,
     serverTypes: state => state.serverTypes,
     isPlaying: state => state.isPlaying,
     settings: state => state.settings,
