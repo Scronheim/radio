@@ -18,7 +18,8 @@ const messages = {
       favoriteAdded: 'Станция добавлена в избранное',
       favoriteDeleted: 'Станция удалена из избранного',
       deleteFavorites: 'Убрать из избранного',
-      noFavorites: 'Избранных станций пока нет',
+      noFavorites: 'Избранных станций нет',
+      noLikedTracks: 'Понравившихся треков нет',
       catalog: 'Каталог станций',
       and: 'и',
       or: 'ИЛИ',
@@ -33,7 +34,9 @@ const messages = {
       decor: 'Оформление',
       about: 'О программе',
       slogan: 'Слушай радио и наслаждайся! ;)',
-      rateThisStation: 'Оцени станцию'
+      rateThisStation: 'Оцени станцию',
+      likeText: 'Понравилось',
+      likedTracksText: 'Понравившиеся треки'
     },
     newRadio: {
       title: 'Добавить новую станцию',
@@ -100,6 +103,7 @@ const messages = {
       favoriteDeleted: 'Station deleted from favorites',
       deleteFavorites: 'Delete from favorites',
       noFavorites: 'No Favorites',
+      noLikedTracks: 'No liked tracks',
       catalog: 'Catalog',
       and: 'and',
       or: 'OR',
@@ -114,7 +118,9 @@ const messages = {
       decor: 'Decor',
       about: 'About',
       slogan: 'Listen radio and enjoy! ;)',
-      rateThisStation: 'Rate this station'
+      rateThisStation: 'Rate this station',
+      likeText: 'Like',
+      likedTracksText: 'Liked tracks'
     },
     newRadio: {
       title: 'Add station',

@@ -5,6 +5,14 @@
         <v-icon v-if="$store.getters.isPlaying">mdi-pause</v-icon>
         <v-icon v-else>mdi-play</v-icon>
       </v-btn>
+      <v-tooltip top v-if="$store.getters.currentSong !== ''">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn v-on="on" v-bind="attrs" color="red" icon @click="likeTrack">
+            <v-icon>mdi-heart</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $t('texts.likeText') }}</span>
+      </v-tooltip>
       <audio id="player" controls style="display: none">
         <source :src="$store.getters.currentStation.src">
       </audio>
@@ -57,6 +65,10 @@ export default {
       }
       this.$store.commit('setVolume', this.$store.getters.player.element.volume * 100)
       this.$store.dispatch('saveSettings')
+    },
+    likeTrack() {
+      this.$store.commit('addLikedTrack', this.$store.getters.currentSong)
+      this.$store.dispatch('saveLikedTracks')
     }
   }
 }

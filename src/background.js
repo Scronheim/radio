@@ -52,16 +52,6 @@ async function createWindow() {
 
 }
 
-app.whenReady().then(() => {
-  tray = new Tray('public/icon512.png')
-  const contextMenu = Menu.buildFromTemplate([
-    {label: 'Play', type: 'normal', click: sendPlay},
-    {label: 'Pause', type: 'normal', click: sendPause},
-    {label: 'Quit', role: 'quit'},
-  ])
-  tray.setToolTip('This is my application.')
-  tray.setContextMenu(contextMenu)
-})
 
 function sendPlay(item, window, event) {
   win.webContents.send('play')
@@ -135,6 +125,11 @@ ipcMain.handle('check-updates', () => {
   autoUpdater.checkForUpdates()
 })
 
+ipcMain.handle('write-current-track', (event, payload) => {
+  fs.writeFile('songs list.txt', `[${payload.date}] - Станция: ${payload.station.name}, Трек: ${payload.song}\n`,
+      { flag: 'a+' }, err => {})
+})
+
 ipcMain.on('restart_app', () => {
   autoUpdater.quitAndInstall()
 })
@@ -165,7 +160,16 @@ app.on('ready', async () => {
     }
   })
 
-  createWindow()
+  createWindow().then(() => {
+    tray = new Tray('public/icon512.png')
+    const contextMenu = Menu.buildFromTemplate([
+      {label: 'Play', type: 'normal', click: sendPlay},
+      {label: 'Pause', type: 'normal', click: sendPause},
+      {label: 'Quit', role: 'quit'},
+    ])
+    tray.setToolTip('This is my application.')
+    tray.setContextMenu(contextMenu)
+  })
 })
 
 

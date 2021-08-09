@@ -65,10 +65,44 @@
         </v-sheet>
         <div class="scroll">
           <v-list dense>
+            <v-list-group>
+              <template v-slot:activator>
+                <v-list-item-icon>
+                  <v-icon size="28" color="red">mdi-heart</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-btn text>{{ $t('texts.likedTracksText') }}</v-btn>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </template>
+
+              <v-list-item dense class="pl-5">
+                <v-list-item-content v-if="$store.getters.likedTracks.length > 0">
+                  <v-list dense v-for="(track, index) in $store.getters.likedTracks" :key="track">
+                    <v-list-item dense>
+                      <v-list-item-title>{{ index + 1 }}. {{ track }}</v-list-item-title>
+                      <v-list-item-action>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn icon color="red" v-on="on" v-bind="attrs" @click="removeLikedTrack(index)">
+                              <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>{{ $t('texts.delete') }}</span>
+                        </v-tooltip>
+                      </v-list-item-action>
+                    </v-list-item>
+                  </v-list>
+                </v-list-item-content>
+                <p v-else class="text-center">{{ $t('texts.noLikedTracks') }}</p>
+              </v-list-item>
+            </v-list-group>
+
             <v-list-group no-action @change="folderIcon = 'mdi-folder'">
               <template v-slot:activator>
                 <v-list-item-icon>
-                  <v-icon size="28">mdi-thumb-up</v-icon>
+                  <v-icon size="28" color="yellow">mdi-thumb-up</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>
@@ -97,7 +131,7 @@
             <v-list-group no-action :value="true" @change="changeFolderIcon">
               <template v-slot:activator>
                 <v-list-item-icon>
-                  <v-icon size="28">{{ folderIcon }}</v-icon>
+                  <v-icon size="28" color="blue">{{ folderIcon }}</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>
@@ -308,6 +342,10 @@ export default {
     folderIcon: 'mdi-folder-open'
   }),
   methods: {
+    removeLikedTrack(index) {
+      this.$store.commit('removeLikedTrack', index)
+      this.$store.dispatch('saveLikedTracks')
+    },
     checkUpdates() {
       this.$store.commit('setLoading', true)
       ipcRenderer.invoke('check-updates')
