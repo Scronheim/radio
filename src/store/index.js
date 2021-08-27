@@ -31,7 +31,7 @@ export default new Vuex.Store({
     },
     ratings: [],
     categories: [],
-    serverTypes: ['icecast', 'shoutcast', '101.ru'],
+    serverTypes: ['icecast', 'shoutcast', '101.ru', 'json'],
     isPlaying: false,
     apiHost: 'http://176.57.214.6:3001',
     wsHost: 'ws://176.57.214.6:8080',

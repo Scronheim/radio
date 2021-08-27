@@ -39,6 +39,10 @@ wss.on('connection', function connection(ws) {
             ws.send(dom.getElementsByClassName('streamstats')[station.icecast_song_field_number].innerHTML)
           }
         })
+      } else if (station.server_type === 'json') {
+        await checkCurrentSong(station.song_src).then((response) => {
+          ws.send(`${response.data.artist} - ${response.data.song}`)
+        })
       }
     }
   })
