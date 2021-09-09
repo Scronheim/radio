@@ -484,7 +484,7 @@ export default {
         if (response.data.success) {
           this.$store.dispatch('refresh')
           this.addGenreDialog = false
-          this.$toast.success(this.$t('newRadio.addGenreText'))
+          this.$toast.success(this.$t('newGenre.addGenreText'))
         }
       }).catch((error) => {
         this.$toast.error(error.response.data.error)
